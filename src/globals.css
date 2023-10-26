@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, 
+body, 
+:root {
+    height: 100%;
+    background-color: rgb(255, 255, 255);
+    color-scheme: light;
+}
+
+.hover-duration-300 {
+    @apply
+    duration-300
+    transition
+}
