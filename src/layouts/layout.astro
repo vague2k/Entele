@@ -1,5 +1,7 @@
 ---
+import { ViewTransitions } from "astro:transitions";
 import Sidebar from "../components/Sidebar";
+import "../globals.css"
 ---
 
 <html lang="en">
@@ -11,8 +13,9 @@ import Sidebar from "../components/Sidebar";
 
 		<title>Astro</title>
 
+        <ViewTransitions/>
 	</head>
-	<body>
+	<body class="font-Poppins">
         <Sidebar client:only>
             <slot>
         </Sidebar>
