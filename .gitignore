@@ -2,6 +2,8 @@
 dist/
 # generated types
 .astro/
+.xata/
+.xatarc
 
 # dependencies
 node_modules/

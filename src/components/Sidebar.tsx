@@ -1,4 +1,4 @@
-import { useState, useMemo, } from "react"
+import { useState, useMemo, useEffect } from "react"
 import type { IconType } from "react-icons"
 import { 
     BiArrowFromRight,
@@ -67,6 +67,15 @@ export default function Sidebar({ children }: SidebarProps) {
             href: '/logout'
         },
     ], [])
+
+    useEffect(() => {
+        const storeCollapsedSidebar = window.localStorage.getItem('collapsedSidebar')
+        setCollapsedSidebar(storeCollapsedSidebar !== null ? JSON.parse(storeCollapsedSidebar) : false)
+    }, []);
+
+    useEffect(() => {
+        window.localStorage.setItem('collapsedSidebar', JSON.stringify(collapsedSidebar))
+    }, [collapsedSidebar]);
 
     return (
         <aside className="flex h-screen">
