@@ -7,7 +7,7 @@ interface FieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const Field = forwardRef<HTMLInputElement, FieldProps>(({ className, type, label, ...props }, ref) => {
   return (
-    <div>
+    <>
       <label className="ml-1">{label}</label>
       <input
         type={type}
@@ -26,7 +26,7 @@ const Field = forwardRef<HTMLInputElement, FieldProps>(({ className, type, label
         ref={ref}
         {...props}
       />
-    </div>
+    </>
   );
 });
 
