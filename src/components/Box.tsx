@@ -6,15 +6,10 @@ interface BoxProps {
     children: ReactNode
 }
 
-const Box: React.FC<BoxProps> = ({
-    className,
-    children
-}) => {
+export default function Box({ className, children }: BoxProps) {
     return (
-        <div className={twMerge('bg-neutral-200 rounded-xl h-fit w-full p-1', className)}>
+        <div className={twMerge('bg-neutral-50 rounded-md h-screen w-full p-3', className)}>
             {children}
         </div>
     ) 
 }
-
-export default Box
