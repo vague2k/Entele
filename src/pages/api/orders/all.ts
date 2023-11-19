@@ -7,13 +7,13 @@ export const GET: APIRoute = async () => {
 
     const orders = await xata.db.orders.getAll()
 
-    return new Response (
+    return new Response(
         JSON.stringify(orders), {
-            status: 200,
-            headers: {
-                "Content-Type": "application/json"
-            }
+        status: 200,
+        headers: {
+            "Content-Type": "application/json"
         }
+    }
     )
 
 }

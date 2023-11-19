@@ -1,15 +1,15 @@
-import { forwardRef } from "react"
-import { twMerge } from "tailwind-merge"
+import { forwardRef } from "react";
+import { twMerge } from "tailwind-merge";
 
-const Input = forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(({
-    className,
-    type,
-    ...props
-}, ref) => {
-        return (
-            <input 
-                type={type}
-                className={twMerge(`
+const Input = forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement>
+>(({ className, type, ...props }, ref) => {
+  return (
+    <input
+      type={type}
+      className={twMerge(
+        `
                 flex 
                 w-full 
                 rounded-lg
@@ -20,14 +20,15 @@ const Input = forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputEl
                 text-sm 
                 focus:outline-neutral-400
                 focus:outline-offset-2
-                `, className)}
-                ref={ref}
-                {...props} 
-            /> 
-        )
-    })
+                `,
+        className,
+      )}
+      ref={ref}
+      {...props}
+    />
+  );
+});
 
-Input.displayName = "Input"
+Input.displayName = "Input";
 
-
-export default Input
+export default Input;
