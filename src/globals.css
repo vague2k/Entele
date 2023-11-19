@@ -2,36 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
-html, 
-body, 
+html,
+body,
 :root {
-    height: 100%;
-    background-color: rgb(255, 255, 255);
-    color-scheme: light;
+  height: 100%;
+  background-color: rgb(255, 255, 255);
+  color-scheme: light;
 }
 
 .hover-duration-300 {
-    @apply
-    duration-300
-    transition
+  @apply duration-300
+    transition;
 }
 
 .table-header {
-    @apply
-    text-sm 
+  @apply text-sm 
     font-medium 
     text-gray-900 
     px-6 
-    py-4 
-    text-left
+    py-2 
+    text-left;
 }
 
 .table-record {
-    @apply
-    text-sm 
+  @apply text-sm 
     text-gray-900 
     font-normal 
     px-6 
-    py-4 
-    whitespace-nowrap
+    py-2 
+    whitespace-nowrap;
 }

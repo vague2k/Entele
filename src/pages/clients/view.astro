@@ -1,65 +1,8 @@
 ---
 import Layout from "../../layouts/layout.astro";
-import Box from "../../components/Box"
-import Input from "../../components/Input"
-import { formatDate } from "../../utils"
-import "../../globals.css"
-
-type responseData = {
-    name: string
-    email: string
-    amountOfOrders: number
-    xata: {
-        createdAt: string
-        updatedAt: string
-    }
-}
-
-const response = await fetch("http:localhost:4321/api/clients/all")
-const data: responseData[] = await response.json()
+import ClientsView from "../../components/ClientsView";
 ---
 
 <Layout>
-    <div class="p-[17px]">
-
-        <div class="flex pb-4 gap-x-3 justify-center items-center">
-            <h1 class="text-neutral-800 font-semibold text-2xl whitespace-nowrap">All your clients in one place!</h1>
-            <Input placeholder="Search" />
-        </div>
-        
-        <Box className="overflow-scroll h-screen">
-            <div class="flex flex-col">
-                <div class="overflow-x-auto sm:mx-0.5 lg:mx-0.5">
-                    <div class="inline-block min-w-full">
-                    <div class="overflow-hidden">
-                        <table class="min-w-full">
-                        <thead class="border-b">
-                            <tr>
-                                <th scope="col" class="table-header">#</th>
-                                <th scope="col" class="table-header">Name</th>
-                                <th scope="col" class="table-header">Email</th>
-                                <th scope="col" class="table-header"># of Orders</th>
-                                <th scope="col" class="table-header">Created At</th>
-                                <th scope="col" class="table-header">Last Updated</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {data.map((client, index) => (
-                                <tr class="border-b py-2">
-                                    <td class="table-record">{index + 1}</td>
-                                    <td class="table-record">{client.name}</td>
-                                    <td class="table-record">{client.email}</td>
-                                    <td class="table-record">{client.amountOfOrders}</td>
-                                    <td class="table-record">{formatDate(client.xata.createdAt)}</td>
-                                    <td class="table-record">{formatDate(client.xata.updatedAt)}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                        </table>
-                    </div>
-                    </div>
-                </div>
-            </div>
-        </Box>
-    </div>
+    <ClientsView client:load />
 </Layout>

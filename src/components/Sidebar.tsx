@@ -1,10 +1,10 @@
-import { useState, useEffect, useMemo } from "react";
-import { twMerge } from "tailwind-merge";
+import { useEffect, useMemo, useState } from "react";
 import type { IconType } from "react-icons";
-import { BiArrowFromRight, BiArrowFromLeft } from "react-icons/bi";
-import { SidebarContext, useSidebarContext } from "../hooks/SidebarContext";
-import "../globals.css";
+import { BiArrowFromLeft, BiArrowFromRight } from "react-icons/bi";
+import { twMerge } from "tailwind-merge";
 import SidebarRoutes from "../data/SidebarRoutes";
+import "../globals.css";
+import { SidebarContext, useSidebarContext } from "../hooks/SidebarContext";
 
 interface SidebarProps {
   children: React.ReactNode;
