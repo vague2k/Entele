@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import {
-  BiConfused,
-  BiEdit,
-  BiRefresh,
-  BiTrash,
-  BiUserPlus,
+    BiConfused,
+    BiEdit,
+    BiRefresh,
+    BiTrash,
+    BiUserPlus,
 } from "react-icons/bi";
 import "../globals.css";
 import { formatDate } from "../utils";
@@ -12,9 +12,9 @@ import Box from "./Box";
 import Button from "./Button";
 import Input from "./Input";
 import {
-  ConfirmDeleteModal,
-  CreateClientModal,
-  EditRecordModal,
+    ConfirmDeleteModal,
+    CreateClientModal,
+    EditRecordModal,
 } from "./Modal";
 
 type responseData = {
