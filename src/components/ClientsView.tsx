@@ -1,11 +1,21 @@
 import { useEffect, useState } from "react";
-import { BiEdit, BiRefresh, BiTrash } from "react-icons/bi";
+import {
+  BiConfused,
+  BiEdit,
+  BiRefresh,
+  BiTrash,
+  BiUserPlus,
+} from "react-icons/bi";
 import "../globals.css";
 import { formatDate } from "../utils";
 import Box from "./Box";
 import Button from "./Button";
 import Input from "./Input";
-import { ConfirmDeleteModal, EditRecordModal } from "./Modal";
+import {
+  ConfirmDeleteModal,
+  CreateClientModal,
+  EditRecordModal,
+} from "./Modal";
 
 type responseData = {
   name: string;
@@ -21,20 +31,27 @@ export default function ClientsView() {
   const [listOfClients, setListOfClients] = useState<responseData[]>([]);
   const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false);
   const [showEditRecordModal, setShowEditRecordModal] = useState(false);
+  const [showCreateClientModal, setShowCreateClientModal] = useState(false);
 
-  const [whichClient, setWhichClient] = useState({
+  const [clientInfo, setClientInfo] = useState({
     name: "",
     email: "",
+    orderAmount: 0,
   });
 
   function closeModal() {
     setShowConfirmDeleteModal(false);
     setShowEditRecordModal(false);
+    setShowCreateClientModal(false);
   }
 
-  function onClientRecordClick(name: string, email: string) {
+  function onClientRecordClick(
+    name: string,
+    email: string,
+    orderAmount: number,
+  ) {
     setShowEditRecordModal(true);
-    setWhichClient({ name, email });
+    setClientInfo({ name, email, orderAmount });
     console.log(name, email);
   }
 
@@ -66,7 +83,16 @@ export default function ClientsView() {
             <BiRefresh size={20} />
           </Button>
           <Button
-            onClick={() => setShowConfirmDeleteModal(true)}
+            onClick={() => setShowCreateClientModal(true)}
+            className="hover:bg-blue-200 text-neutral-800 hover:text-blue-600"
+          >
+            <BiUserPlus size={20} />
+            Create Client
+          </Button>
+          <Button
+            onClick={() => {
+              setShowConfirmDeleteModal(true);
+            }}
             className="hover:bg-red-200 text-red-500"
           >
             <BiTrash size={20} />
@@ -76,61 +102,92 @@ export default function ClientsView() {
       </div>
 
       <Box className="overflow-scroll max-h-[76vh]">
-        <div className="flex flex-col">
-          <div className="overflow-x-auto sm:mx-0.5 lg:mx-0.5">
-            <div className="inline-block min-w-full">
-              <div className="overflow-hidden">
-                <table className="min-w-full">
-                  <thead className="border-b">
-                    <tr>
-                      <th scope="col" className="table-header">
-                        #
-                      </th>
-                      <th scope="col" className="table-header">
-                        Name
-                      </th>
-                      <th scope="col" className="table-header">
-                        Email
-                      </th>
-                      <th scope="col" className="table-header">
-                        # of Orders
-                      </th>
-                      <th scope="col" className="table-header">
-                        Created At
-                      </th>
-                      <th scope="col" className="table-header">
-                        Last Updated
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {listOfClients.map((client, index) => (
-                      <tr
-                        onClick={() =>
-                          onClientRecordClick(client.name, client.email)
-                        }
-                        className="border-b py-2 hover:bg-neutral-200 duration-300 cursor-pointer"
-                      >
-                        <td className="table-record">{index + 1}</td>
-                        <td className="table-record">{client.name}</td>
-                        <td className="table-record">{client.email}</td>
-                        <td className="table-record">
-                          {client.amountOfOrders}
-                        </td>
-                        <td className="table-record">
-                          {formatDate(client.xata.createdAt)}
-                        </td>
-                        <td className="table-record">
-                          {formatDate(client.xata.updatedAt)}
-                        </td>
+        {listOfClients.length <= 0 && (
+          <div className="mt-40 flex flex-col gap-y-3 items-center text-neutral-400">
+            <BiConfused size={100} />
+            <h1 className="font-semibold text-3xl">
+              It looks like you have no clients!
+            </h1>
+            <h1 className="font-medium text-md">
+              Try creating one using the create client button above
+            </h1>
+          </div>
+        )}
+
+        {listOfClients.length > 0 && (
+          <div className="flex flex-col">
+            <div className="overflow-x-auto sm:mx-0.5 lg:mx-0.5">
+              <div className="inline-block min-w-full">
+                <div className="overflow-hidden">
+                  <table className="min-w-full">
+                    <thead className="border-b">
+                      <tr>
+                        <th scope="col" className="table-header">
+                          #
+                        </th>
+                        <th scope="col" className="table-header">
+                          Name
+                        </th>
+                        <th scope="col" className="table-header">
+                          Email
+                        </th>
+                        <th scope="col" className="table-header">
+                          # of Orders
+                        </th>
+                        <th scope="col" className="table-header">
+                          Created At
+                        </th>
+                        <th scope="col" className="table-header">
+                          Last Updated
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {listOfClients.map((client, index) => (
+                        <tr
+                          key={client.xata.createdAt}
+                          onClick={() =>
+                            onClientRecordClick(
+                              client.name,
+                              client.email,
+                              client.amountOfOrders,
+                            )
+                          }
+                          onKeyDown={(event) => {
+                            // Check if the Enter key is pressed
+                            if (event.key === "Enter") {
+                              onClientRecordClick(
+                                client.name,
+                                client.email,
+                                client.amountOfOrders,
+                              );
+                            }
+                          }}
+                          className="border-b py-2 hover:bg-neutral-200 duration-300 cursor-pointer"
+                          role="button"
+                          tabIndex={0}
+                        >
+                          <td className="table-record">{index + 1}</td>
+                          <td className="table-record">{client.name}</td>
+                          <td className="table-record">{client.email}</td>
+                          <td className="table-record">
+                            {client.amountOfOrders}
+                          </td>
+                          <td className="table-record">
+                            {formatDate(client.xata.createdAt)}
+                          </td>
+                          <td className="table-record">
+                            {formatDate(client.xata.updatedAt)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </Box>
 
       <ConfirmDeleteModal
@@ -147,8 +204,17 @@ export default function ClientsView() {
         header="Edit Record"
         description=""
         icon={BiEdit}
-        clientName={whichClient.name}
-        clientEmail={whichClient.email}
+        clientName={clientInfo.name}
+        clientEmail={clientInfo.email}
+        clientOrderAmount={clientInfo.orderAmount}
+      />
+
+      <CreateClientModal
+        onClose={closeModal}
+        visible={showCreateClientModal}
+        header="Create a new client"
+        description=""
+        icon={BiUserPlus}
       />
     </div>
   );

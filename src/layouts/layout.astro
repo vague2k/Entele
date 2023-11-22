@@ -1,22 +1,23 @@
 ---
 import Sidebar from "../components/Sidebar";
-import "../globals.css"
+import ToastProvider from "../providers/ToastProvider";
+import "../globals.css";
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
 
-		<title>Astro</title>
+        <title>Astro</title>
+    </head>
 
-	</head>
-
-	<body class="font-Inter">
+    <body class="font-Inter">
+        <ToastProvider client:only />
         <Sidebar client:only>
-            <slot>
+            <slot />
         </Sidebar>
-	</body>
+    </body>
 </html>
