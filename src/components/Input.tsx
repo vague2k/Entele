@@ -18,8 +18,6 @@ const Input = forwardRef<
                 border-neutral-300
                 p-2
                 text-sm 
-                focus:outline-neutral-400
-                focus:outline-offset-2
                 `,
         className,
       )}

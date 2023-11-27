@@ -1,34 +1,32 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import {
-    BiConfused,
-    BiEdit,
-    BiRefresh,
-    BiTrash,
-    BiUserPlus,
+  BiConfused,
+  BiEdit,
+  BiRefresh,
+  BiTrash,
+  BiUserPlus,
 } from "react-icons/bi";
 import "../globals.css";
-import { formatDate } from "../utils";
+import { formatDate } from "../utils/formatDate";
+import type { Clients } from "../xata";
 import Box from "./Box";
 import Button from "./Button";
 import Input from "./Input";
-import {
-    ConfirmDeleteModal,
-    CreateClientModal,
-    EditRecordModal,
-} from "./Modal";
+import CreateClientModal from "./modals/CreateClientModal";
+import DeleteAllClientsModal from "./modals/DeleteAllClientsModal";
+import EditRecordModal from "./modals/EditClientRecordModal";
 
-type responseData = {
-  name: string;
-  email: string;
-  amountOfOrders: number;
+interface ClientsResponse extends Clients {
   xata: {
     createdAt: string;
     updatedAt: string;
   };
-};
+}
 
 export default function ClientsView() {
-  const [listOfClients, setListOfClients] = useState<responseData[]>([]);
+  const [listOfClients, setListOfClients] = useState<ClientsResponse[]>([]);
   const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false);
   const [showEditRecordModal, setShowEditRecordModal] = useState(false);
   const [showCreateClientModal, setShowCreateClientModal] = useState(false);
@@ -57,9 +55,21 @@ export default function ClientsView() {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch("http://localhost:4321/api/clients/all");
-      const data: responseData[] = await response.json();
-      setListOfClients(data);
+      try {
+        const response = await axios.get(
+          "http://localhost:4321/api/clients/all",
+        );
+        const data: ClientsResponse[] = await response.data;
+        setListOfClients(data);
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          toast.error(error.response?.data.message);
+        } else {
+          toast.error(
+            "An unknown error has occured, and has been automatically logged. Please try this action again later",
+          );
+        }
+      }
     }
 
     fetchData();
@@ -145,7 +155,7 @@ export default function ClientsView() {
                     <tbody>
                       {listOfClients.map((client, index) => (
                         <tr
-                          key={client.xata.createdAt}
+                          key={client.id}
                           onClick={() =>
                             onClientRecordClick(
                               client.name,
@@ -190,7 +200,7 @@ export default function ClientsView() {
         )}
       </Box>
 
-      <ConfirmDeleteModal
+      <DeleteAllClientsModal
         onClose={closeModal}
         visible={showConfirmDeleteModal}
         header={`Delete all ${listOfClients.length} records of clients?`}
