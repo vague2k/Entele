@@ -13,7 +13,6 @@ export const POST: APIRoute = async ({ request }) => {
     try {
 
         const formBody: NewClientFormBody = await request.json();
-        console.log(formBody)
         if (!formBody.name || !formBody.email) {
             return new Response(
                 JSON.stringify({ message: "Missing required field" }),
@@ -21,16 +20,12 @@ export const POST: APIRoute = async ({ request }) => {
             );
         }
 
-        if (!formBody.amountOfOrders) {
-            formBody.amountOfOrders = 0;
-        }
-
         const newClient = await xata.db.clients.create(formBody);
 
         return new Response(
             JSON.stringify({ newClient, message: "New client created!" }),
             {
-                status: 200,
+                status: 201,
                 headers: { "Content-Type": "application/json" }
             }
         );
