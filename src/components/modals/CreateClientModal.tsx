@@ -12,7 +12,8 @@ export default function CreateClientModal({
   onClose,
   header,
   icon: Icon,
-}: ModalProps) {
+  refreshIfDataChange,
+}: ModalProps & { refreshIfDataChange: () => void }) {
   if (!visible) return null;
 
   const [clientFormData, setClientFormData] = useState({
@@ -32,6 +33,8 @@ export default function CreateClientModal({
       const response = await axios.post("/api/clients/create", clientFormData, {
         headers: { "Content-Type": "application/json" },
       });
+
+      refreshIfDataChange();
 
       toast.success(response.data.message);
     } catch (error: unknown) {

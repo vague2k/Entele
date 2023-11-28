@@ -11,7 +11,8 @@ export default function ConfirmDeleteModal({
   header,
   description,
   icon: Icon,
-}: ModalProps) {
+  refreshIfDataChange,
+}: ModalProps & { refreshIfDataChange: () => void }) {
   if (!visible) return null;
 
   async function handleDeleteAllRecords() {
@@ -20,6 +21,7 @@ export default function ConfirmDeleteModal({
         headers: { "Content-Type": "application/json" },
       });
 
+      refreshIfDataChange();
       toast.success(response.data.message);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {

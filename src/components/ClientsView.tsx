@@ -53,25 +53,27 @@ export default function ClientsView() {
     console.log(name, email);
   }
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await axios.get(
-          "http://localhost:4321/api/clients/all",
+  async function fetchData() {
+    try {
+      const response = await axios.get("http://localhost:4321/api/clients/all");
+      const data: ClientsResponse[] = await response.data;
+      setListOfClients(data);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data.message);
+      } else {
+        toast.error(
+          "An unknown error has occured, and has been automatically logged. Please try this action again later",
         );
-        const data: ClientsResponse[] = await response.data;
-        setListOfClients(data);
-      } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          toast.error(error.response?.data.message);
-        } else {
-          toast.error(
-            "An unknown error has occured, and has been automatically logged. Please try this action again later",
-          );
-        }
       }
     }
+  }
 
+  async function refreshIfDataChanged() {
+    await fetchData();
+  }
+
+  useEffect(() => {
     fetchData();
   }, []);
   return (
@@ -206,6 +208,7 @@ export default function ClientsView() {
         header={`Delete all ${listOfClients.length} records of clients?`}
         description="Are you sure you want to delete all records of clients? This action cannot be undone"
         icon={BiTrash}
+        refreshIfDataChange={refreshIfDataChanged}
       />
 
       <EditRecordModal
@@ -225,6 +228,7 @@ export default function ClientsView() {
         header="Create a new client"
         description=""
         icon={BiUserPlus}
+        refreshIfDataChange={refreshIfDataChanged}
       />
     </div>
   );
