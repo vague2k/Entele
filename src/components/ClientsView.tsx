@@ -1,13 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import {
-  BiConfused,
-  BiEdit,
-  BiRefresh,
-  BiTrash,
-  BiUserPlus,
-} from "react-icons/bi";
+import { BiConfused, BiRefresh, BiTrash, BiUserPlus } from "react-icons/bi";
 import "../globals.css";
 import { formatDate } from "../utils/formatDate";
 import type { Clients } from "../xata";
@@ -84,7 +78,6 @@ export default function ClientsView() {
         </h1>
         <Input placeholder="Search" />
       </div>
-
       <div className="flex pb-4 justify-center items-center">
         <Box className="flex flex-row gap-x-3 h-fit">
           <Button
@@ -204,30 +197,21 @@ export default function ClientsView() {
 
       <DeleteAllClientsModal
         onClose={closeModal}
-        visible={showConfirmDeleteModal}
-        header={`Delete all ${listOfClients.length} records of clients?`}
-        description="Are you sure you want to delete all records of clients? This action cannot be undone"
-        icon={BiTrash}
+        isOpen={showConfirmDeleteModal}
+        totalRecords={listOfClients.length}
         refreshIfDataChange={refreshIfDataChanged}
       />
 
       <EditRecordModal
         onClose={closeModal}
-        visible={showEditRecordModal}
-        header="Edit Record"
-        description=""
-        icon={BiEdit}
-        clientName={clientInfo.name}
-        clientEmail={clientInfo.email}
-        clientOrderAmount={clientInfo.orderAmount}
+        isOpen={showEditRecordModal}
+        clientInfo={[clientInfo.name, clientInfo.email, clientInfo.orderAmount]}
+        refreshIfDataChange={refreshIfDataChanged}
       />
 
       <CreateClientModal
         onClose={closeModal}
-        visible={showCreateClientModal}
-        header="Create a new client"
-        description=""
-        icon={BiUserPlus}
+        isOpen={showCreateClientModal}
         refreshIfDataChange={refreshIfDataChanged}
       />
     </div>

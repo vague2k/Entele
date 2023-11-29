@@ -1,16 +1,11 @@
 import type { ReactEventHandler } from "react";
-import type { IconType } from "react-icons";
 
 export interface ModalProps {
-    header: string;
-    description: string;
-    icon: IconType;
-    visible: boolean;
+    isOpen: boolean;
     onClose: ReactEventHandler;
-}
-
-export interface EditRecordModalProps extends ModalProps {
-    clientName: string;
-    clientEmail: string;
-    clientOrderAmount: number;
+    header?: string;
+    description?: string;
+    refreshIfDataChange: () => void
+    clientInfo?: [string, string, number]
+    totalRecords?: number | 0
 }

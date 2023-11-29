@@ -1,19 +1,17 @@
-import { BiX } from "react-icons/bi";
+import { BiEdit, BiX } from "react-icons/bi";
 import Box from "../Box";
 import Button from "../Button";
 import Input from "../Input";
-import type { EditRecordModalProps } from "./types";
+import type { ModalProps } from "./types";
 
 export default function EditRecordModal({
-  visible,
+  isOpen,
   onClose,
-  header,
-  icon: Icon,
-  clientName,
-  clientEmail,
-  clientOrderAmount,
-}: EditRecordModalProps) {
-  if (!visible) return null;
+  clientInfo,
+}: ModalProps) {
+  if (!isOpen) return null;
+
+  const [name, email, orderAmount] = clientInfo || ["", "", 0];
 
   return (
     <div className="flex items-center justify-center fixed inset-0 bg-neutral-400 bg-opacity-30 backdrop-blur-sm">
@@ -27,18 +25,20 @@ export default function EditRecordModal({
             <BiX size={20} />
           </Button>
           <div className="flex justify-center items-center w-11 h-11 rounded-full bg-blue-200">
-            <Icon size={25} className="text-blue-500" />
+            <BiEdit size={25} className="text-blue-500" />
           </div>
-          <h1 className="font-semibold text-lg text-neutral-800">{header}</h1>
+          <h1 className="font-semibold text-lg text-neutral-800">
+            Edit Record
+          </h1>
           <p className="flex flex-col pb-3 font-regular text-sm text-center text-neutral-500">
             <span>Client's Info</span>
-            <span>{clientName}</span>
-            <span>{clientEmail}</span>
+            <span>{name}</span>
+            <span>{email}</span>
           </p>
 
-          <Input placeholder={`Name: ${clientName}`} />
-          <Input placeholder={`Email: ${clientEmail}`} />
-          <Input placeholder={`Total orders: ${clientOrderAmount}`} />
+          <Input value={name} />
+          <Input value={email} />
+          <Input value={orderAmount} />
         </div>
 
         <div className="flex justify-center items-center gap-x-3 pt-3">
