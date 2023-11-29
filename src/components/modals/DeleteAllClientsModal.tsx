@@ -78,13 +78,20 @@ export default function ConfirmDeleteModal({
       )}
       {wasAllDataDeleted && (
         <Box className="h-fit w-fit max-w-lg p-8">
-          <div className="flex flex-col justify-center gap-y-3 items-center px-8">
+          <div className="relative flex flex-col justify-center gap-y-3 items-center px-8">
             <div className="flex justify-center items-center w-11 h-11 rounded-full bg-green-500">
               <BiCheck size={25} className="text-neutral-50" />
             </div>
             <h1 className="font-semibold text-lg text-neutral-800">
               All clients have been deleted.
             </h1>
+            <Button
+              onClick={onClose}
+              type="button"
+              className="absolute -right-5 -top-5 bg-transparent hover:bg-neutral-200 duration-300 text-neutral-800"
+            >
+              <BiX size={20} />
+            </Button>
             <Button
               onClick={onClose}
               type="button"
