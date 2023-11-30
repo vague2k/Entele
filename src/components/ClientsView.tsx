@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import toast from "react-hot-toast";
 import { BiConfused, BiRefresh, BiTrash, BiUserPlus } from "react-icons/bi";
 import "../globals.css";
@@ -11,6 +11,7 @@ import Input from "./Input";
 import CreateClientModal from "./modals/CreateClientModal";
 import DeleteAllClientsModal from "./modals/DeleteAllClientsModal";
 import EditRecordModal from "./modals/EditClientRecordModal";
+import modalReducer from "./modals/modalReducer";
 
 interface ClientsResponse extends Clients {
   xata: {
@@ -21,28 +22,23 @@ interface ClientsResponse extends Clients {
 
 export default function ClientsView() {
   const [listOfClients, setListOfClients] = useState<ClientsResponse[]>([]);
-  const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false);
-  const [showEditRecordModal, setShowEditRecordModal] = useState(false);
-  const [showCreateClientModal, setShowCreateClientModal] = useState(false);
-
+  const [modalState, dispatchModal] = useReducer(modalReducer, {
+    isCreateClientOpen: false,
+    isDeleteAllOpen: false,
+    isEditRecordOpen: false,
+  });
   const [clientInfo, setClientInfo] = useState({
     name: "",
     email: "",
     orderAmount: 0,
   });
 
-  function closeModal() {
-    setShowConfirmDeleteModal(false);
-    setShowEditRecordModal(false);
-    setShowCreateClientModal(false);
-  }
-
   function onClientRecordClick(
     name: string,
     email: string,
     orderAmount: number,
   ) {
-    setShowEditRecordModal(true);
+    dispatchModal({ type: "openEditRecord" });
     setClientInfo({ name, email, orderAmount });
     console.log(name, email);
   }
@@ -88,16 +84,14 @@ export default function ClientsView() {
             <BiRefresh size={20} />
           </Button>
           <Button
-            onClick={() => setShowCreateClientModal(true)}
+            onClick={() => dispatchModal({ type: "openCreateClient" })}
             className="hover:bg-blue-200 text-neutral-800 hover:text-blue-600"
           >
             <BiUserPlus size={20} />
             Create Client
           </Button>
           <Button
-            onClick={() => {
-              setShowConfirmDeleteModal(true);
-            }}
+            onClick={() => dispatchModal({ type: "openDeleteAll" })}
             className="hover:bg-red-200 text-red-500"
           >
             <BiTrash size={20} />
@@ -196,22 +190,22 @@ export default function ClientsView() {
       </Box>
 
       <DeleteAllClientsModal
-        onClose={closeModal}
-        isOpen={showConfirmDeleteModal}
+        onClose={() => dispatchModal({ type: "openDeleteAll" })}
+        isOpen={modalState.isDeleteAllOpen}
         totalRecords={listOfClients.length}
         refreshIfDataChange={refreshIfDataChanged}
       />
 
       <EditRecordModal
-        onClose={closeModal}
-        isOpen={showEditRecordModal}
+        onClose={() => dispatchModal({ type: "openEditRecord" })}
+        isOpen={modalState.isEditRecordOpen}
         clientInfo={[clientInfo.name, clientInfo.email, clientInfo.orderAmount]}
         refreshIfDataChange={refreshIfDataChanged}
       />
 
       <CreateClientModal
-        onClose={closeModal}
-        isOpen={showCreateClientModal}
+        onClose={() => dispatchModal({ type: "openCreateClient" })}
+        isOpen={modalState.isCreateClientOpen}
         refreshIfDataChange={refreshIfDataChanged}
       />
     </div>
