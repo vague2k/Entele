@@ -100,7 +100,7 @@ export default function ClientsView() {
         </Box>
       </div>
 
-      <Box className="overflow-scroll max-h-[76vh]">
+      <Box className="overflow-y-auto max-h-[76vh]">
         {listOfClients.length <= 0 && (
           <div className="mt-40 flex flex-col gap-y-3 items-center text-neutral-400">
             <BiConfused size={100} />
