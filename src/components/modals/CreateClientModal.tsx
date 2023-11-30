@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import toast from "react-hot-toast";
-import { BiCheck, BiX } from "react-icons/bi";
+import { BiUserPlus, BiX } from "react-icons/bi";
 import Box from "../Box";
 import Button from "../Button";
 import Input from "../Input";
@@ -30,14 +30,12 @@ export default function CreateClientModal({
     event.preventDefault();
 
     try {
-      const response = await axios.post("/api/clients/create", clientFormData, {
+      await axios.post("/api/clients/create", clientFormData, {
         headers: { "Content-Type": "application/json" },
       });
 
       refreshIfDataChange();
       setOnSuccess(true);
-
-      toast.success(response.data.message);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         toast.error(error.response?.data.message);
@@ -63,7 +61,7 @@ export default function CreateClientModal({
                 <BiX size={20} />
               </Button>
               <div className="flex justify-center items-center w-11 h-11 rounded-full bg-blue-200">
-                <BiCheck size={25} className="text-blue-500" />
+                <BiUserPlus size={25} className="text-blue-500" />
               </div>
               <h1 className="font-semibold text-lg text-neutral-800">
                 Create a new client

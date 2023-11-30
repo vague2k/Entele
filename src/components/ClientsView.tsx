@@ -28,19 +28,20 @@ export default function ClientsView() {
     isEditRecordOpen: false,
   });
   const [clientInfo, setClientInfo] = useState({
+    id: "",
     name: "",
     email: "",
-    orderAmount: 0,
+    amountOfOrders: 0,
   });
 
   function onClientRecordClick(
+    id: string,
     name: string,
     email: string,
-    orderAmount: number,
+    amountOfOrders: number,
   ) {
     dispatchModal({ type: "openEditRecord" });
-    setClientInfo({ name, email, orderAmount });
-    console.log(name, email);
+    setClientInfo({ id, name, email, amountOfOrders });
   }
 
   async function fetchData() {
@@ -147,6 +148,7 @@ export default function ClientsView() {
                           key={client.id}
                           onClick={() =>
                             onClientRecordClick(
+                              client.id,
                               client.name,
                               client.email,
                               client.amountOfOrders,
@@ -156,6 +158,7 @@ export default function ClientsView() {
                             // Check if the Enter key is pressed
                             if (event.key === "Enter") {
                               onClientRecordClick(
+                                client.id,
                                 client.name,
                                 client.email,
                                 client.amountOfOrders,
@@ -199,7 +202,12 @@ export default function ClientsView() {
       <EditRecordModal
         onClose={() => dispatchModal({ type: "openEditRecord" })}
         isOpen={modalState.isEditRecordOpen}
-        clientInfo={[clientInfo.name, clientInfo.email, clientInfo.orderAmount]}
+        clientInfo={[
+          clientInfo.id,
+          clientInfo.name,
+          clientInfo.email,
+          clientInfo.amountOfOrders,
+        ]}
         refreshIfDataChange={refreshIfDataChanged}
       />
 
