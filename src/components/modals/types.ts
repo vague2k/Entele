@@ -5,6 +5,6 @@ export interface ModalProps {
     header?: string;
     description?: string;
     refreshIfDataChange: () => void
-    clientInfo?: [string, string, number]
+    clientInfo?: [string, string, string, number]
     totalRecords?: number | 0
 }
