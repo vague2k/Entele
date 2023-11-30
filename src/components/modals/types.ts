@@ -1,8 +1,7 @@
-import type { ReactEventHandler } from "react";
 
 export interface ModalProps {
     isOpen: boolean;
-    onClose: ReactEventHandler;
+    onClose: () => void;
     header?: string;
     description?: string;
     refreshIfDataChange: () => void
