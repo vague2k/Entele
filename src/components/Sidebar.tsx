@@ -10,6 +10,7 @@ import { twMerge } from "tailwind-merge";
 import SidebarRoutes from "../data/SidebarRoutes";
 import "../globals.css";
 import { SidebarContext, useSidebarContext } from "../hooks/SidebarContext";
+import { appliedTheme, toggleTheme } from "../utils/toggleTheme";
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -31,6 +32,7 @@ interface SidebarItemProps {
 
 export default function Sidebar({ children }: SidebarProps) {
   const [collapsedSidebar, setCollapsedSidebar] = useState(true);
+  const [isDark, setIsDark] = useState(false);
 
   const routes = useMemo(() => SidebarRoutes, []);
 
@@ -51,6 +53,10 @@ export default function Sidebar({ children }: SidebarProps) {
     );
   }, [collapsedSidebar]);
 
+  useEffect(() => {
+    appliedTheme();
+  }, []);
+
   return (
     <aside className="flex h-screen">
       <nav className="h-full flex flex-col border-r border-fill-100 shadow-sm">
@@ -58,19 +64,24 @@ export default function Sidebar({ children }: SidebarProps) {
           <h1
             className={twMerge(
               "flex text-2xl text-primary-500 font-bold overflow-hidden transition-all",
-              collapsedSidebar ? "w-44" : "w-0",
+              collapsedSidebar ? "w-36" : "w-0",
             )}
           >
             Entele
           </h1>
           <button
             type="button"
-            onClick={() => setCollapsedSidebar(!collapsedSidebar)}
+            onClick={() => {
+              toggleTheme();
+              // TODO: Fix icon not respecting theme on refresh
+              setIsDark(!isDark);
+            }}
             className={twMerge(
-              "p-1.5 rounded-lg bg-fill-100 hover:bg-fill-200 transition duration-300",
+              "p-1.5 mr-1 rounded-lg bg-fill-100 hover:bg-fill-200 transition duration-300",
+              collapsedSidebar ? "block" : "hidden",
             )}
           >
-            {collapsedSidebar ? (
+            {isDark ? (
               <BiMoon size={25} className="text-base-950" />
             ) : (
               <BiSun size={25} className="text-base-950" />
