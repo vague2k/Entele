@@ -4,7 +4,8 @@ import ToastProvider from "../providers/ToastProvider";
 import "../globals.css";
 ---
 
-<html lang="en">
+<html lang="en" class="light">
+    <!-- <html lang="en" class="dark"> -->
     <head>
         <meta charset="utf-8" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -14,7 +15,7 @@ import "../globals.css";
         <title>Astro</title>
     </head>
 
-    <body class="font-Inter">
+    <body class="font-Inter h-full bg-fill-0">
         <ToastProvider client:only />
         <Sidebar client:only>
             <slot />

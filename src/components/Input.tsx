@@ -15,9 +15,11 @@ const Input = forwardRef<
                 rounded-lg
                 bg-transparent
                 border-2 
-                border-neutral-300
+                border-fill-200
                 p-2
                 text-sm 
+                placeholder-fill-400
+                text-base-950
                 `,
         className,
       )}

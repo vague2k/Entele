@@ -5,15 +5,10 @@ import { twMerge } from "tailwind-merge";
 import SidebarRoutes from "../data/SidebarRoutes";
 import "../globals.css";
 import { SidebarContext, useSidebarContext } from "../hooks/SidebarContext";
+import { ThemeToggleButton } from "./ThemeToggleButton";
 
 interface SidebarProps {
   children: React.ReactNode;
-}
-
-interface Subpage {
-  label: string;
-  href: string;
-  active: boolean;
 }
 
 interface SidebarItemProps {
@@ -21,7 +16,6 @@ interface SidebarItemProps {
   label: string;
   active: boolean;
   href: string;
-  subpages: Subpage[];
 }
 
 export default function Sidebar({ children }: SidebarProps) {
@@ -48,25 +42,28 @@ export default function Sidebar({ children }: SidebarProps) {
 
   return (
     <aside className="flex h-screen">
-      <nav className="h-full flex flex-col border-r shadow-sm">
+      <nav className="h-full flex flex-col border-r border-fill-100 shadow-sm">
         <div className="p-4 pb-4 flex justify-center items-center">
           <h1
             className={twMerge(
-              "flex text-2xl font-bold overflow-hidden transition-all",
-              collapsedSidebar ? "w-44" : "w-0",
+              "flex text-2xl text-primary-500 font-bold overflow-hidden transition-all",
+              collapsedSidebar ? "w-36" : "w-0",
             )}
           >
             Entele
           </h1>
+          <ThemeToggleButton collapsedSidebar={collapsedSidebar} />
           <button
             type="button"
             onClick={() => setCollapsedSidebar(!collapsedSidebar)}
-            className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 hover-duration-300"
+            className={twMerge(
+              "p-1.5 rounded-lg bg-fill-100 hover:bg-fill-200 transition duration-300",
+            )}
           >
             {collapsedSidebar ? (
-              <BiArrowFromRight size={25} />
+              <BiArrowFromRight size={25} className="text-base-950" />
             ) : (
-              <BiArrowFromLeft size={25} />
+              <BiArrowFromLeft size={25} className="text-base-950" />
             )}
           </button>
         </div>
@@ -79,7 +76,7 @@ export default function Sidebar({ children }: SidebarProps) {
           </ul>
         </SidebarContext.Provider>
 
-        <div className="border-t flex p-3 justify-center items-center">
+        <div className="border-t border-fill-100 flex p-3 justify-center items-center">
           <div className="w-10 h-10 rounded-full bg-blue-500" />
           <div
             className={twMerge(
@@ -88,8 +85,8 @@ export default function Sidebar({ children }: SidebarProps) {
             )}
           >
             <div className="leading-4 mr-4">
-              <h1 className="font-semibold">Albert</h1>
-              <span className="text-xs text-gray-600 truncate">
+              <h1 className="font-semibold text-base-950">Albert</h1>
+              <span className="text-xs text-base-400 truncate">
                 albe.hern24@gmail.com
               </span>
             </div>
@@ -101,39 +98,17 @@ export default function Sidebar({ children }: SidebarProps) {
   );
 }
 
-export function SidebarItem({
-  Icon,
-  label,
-  active,
-  href,
-  subpages,
-}: SidebarItemProps) {
+export function SidebarItem({ Icon, label, active, href }: SidebarItemProps) {
   const expanded = useSidebarContext();
-  const [isHovered, setIsHovered] = useState(false);
-
-  let timer = 0;
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-    clearTimeout(timer);
-  };
-
-  const handleMouseLeave = () => {
-    timer = setTimeout(() => {
-      setIsHovered(false);
-    }, 50);
-  };
 
   return (
     <a
       href={href}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       className={twMerge(
-        `relative flex items-center p-2 rounded-md my-1 text-neutral-500`,
+        "relative flex items-center p-2 rounded-md my-1 text-base-500",
         active
-          ? "text-blue-600 bg-blue-100 hover:bg-blue-200 duration-300"
-          : "hover:bg-neutral-200 duration-300",
+          ? "text-primary-500 bg-primary-100 hover:shadow-[0_0px_30px_rgba(0,0,0,0.25)] hover:shadow-primary-100 hover:scale-105 hover:-translate-y-0.5 duration-300"
+          : "hover:bg-fill-100 duration-300 hover:-translate-y-1",
       )}
     >
       <Icon size={25} />
@@ -145,39 +120,6 @@ export function SidebarItem({
       >
         {label}
       </span>
-
-      {isHovered && subpages.length > 0 && (
-        <div
-          className={twMerge(
-            `absolute flex flex-col whitespace-nowrap left-full rounded-md w-fit p-2 ml-3 
-                        text-neutral-500 gap-y-1 bg-white text-sm shadow-xl transition-all`,
-            isHovered
-              ? "visible opacity-100 translate-x-3 duration-300 ease-in"
-              : "invisible opacity-0 -translate-x-3 duration-300 ease-in",
-          )}
-        >
-          <span className="font-semibold text-lg">{label}</span>
-          {subpages.map((subpage) => (
-            <SubpageButtonLink key={subpage.href} {...subpage} />
-          ))}
-        </div>
-      )}
-    </a>
-  );
-}
-
-export function SubpageButtonLink({ label, active, href }: Subpage) {
-  return (
-    <a
-      className={twMerge(
-        "p-2 rounded-md hover:bg-neutral-200 duration-300",
-        active
-          ? "text-blue-600 bg-blue-100 hover:bg-blue-200 duration-300"
-          : "hover:bg-neutral-200 duration-300",
-      )}
-      href={href}
-    >
-      {label}
     </a>
   );
 }

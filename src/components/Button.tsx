@@ -14,12 +14,16 @@ const Button = forwardRef<
             cursor-pointer 
             items-center 
             font-medium 
-            bg-neutral-100 
-            hover:bg-neutral-200
+            bg-fill-100 
+            hover:bg-fill-200
             duration-300
             rounded-lg 
             p-2 
             gap-x-2
+            text-base-950 
+            hover:shadow-xl 
+            hover:-translate-y-0.5
+
             `,
         className,
       )}

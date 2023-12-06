@@ -1,3 +1,4 @@
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import axios from "axios";
 import { useEffect, useReducer, useState } from "react";
 import toast from "react-hot-toast";
@@ -33,6 +34,7 @@ export default function ClientsView() {
     email: "",
     amountOfOrders: 0,
   });
+  const [animationParent] = useAutoAnimate();
 
   function onClientRecordClick(
     id: string,
@@ -68,9 +70,9 @@ export default function ClientsView() {
     fetchData();
   }, []);
   return (
-    <div className="p-[17px]">
+    <div className="p-[17px]" ref={animationParent}>
       <div className="flex pb-4 gap-x-3 justify-center items-center">
-        <h1 className="text-neutral-800 font-semibold text-2xl whitespace-nowrap">
+        <h1 className="text-base-950 font-semibold text-2xl whitespace-nowrap">
           All your clients in one place!
         </h1>
         <Input placeholder="Search" />
@@ -84,17 +86,11 @@ export default function ClientsView() {
           >
             <BiRefresh size={20} />
           </Button>
-          <Button
-            onClick={() => dispatchModal({ type: "openCreateClient" })}
-            className="hover:bg-blue-200 text-neutral-800 hover:text-blue-600"
-          >
+          <Button onClick={() => dispatchModal({ type: "openCreateClient" })}>
             <BiUserPlus size={20} />
             Create Client
           </Button>
-          <Button
-            onClick={() => dispatchModal({ type: "openDeleteAll" })}
-            className="hover:bg-red-200 text-red-500"
-          >
+          <Button onClick={() => dispatchModal({ type: "openDeleteAll" })}>
             <BiTrash size={20} />
             Delete All
           </Button>
@@ -103,7 +99,7 @@ export default function ClientsView() {
 
       <Box className="overflow-y-auto max-h-[76vh]">
         {listOfClients.length <= 0 && (
-          <div className="mt-40 flex flex-col gap-y-3 items-center text-neutral-400">
+          <div className="mt-40 flex flex-col gap-y-3 items-center text-base-300">
             <BiConfused size={100} />
             <h1 className="font-semibold text-3xl">
               It looks like you have no clients!
@@ -120,7 +116,7 @@ export default function ClientsView() {
               <div className="inline-block min-w-full">
                 <div className="overflow-hidden">
                   <table className="min-w-full">
-                    <thead className="border-b">
+                    <thead className="border-b border-fill-200">
                       <tr>
                         <th scope="col" className="table-header">
                           #
@@ -165,7 +161,7 @@ export default function ClientsView() {
                               );
                             }
                           }}
-                          className="border-b py-2 hover:bg-neutral-200 duration-300 cursor-pointer"
+                          className="border-b border-fill-200 py-2 hover:bg-fill-100 duration-300 cursor-pointer"
                           role="button"
                           tabIndex={0}
                         >
