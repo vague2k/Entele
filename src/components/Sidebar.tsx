@@ -1,16 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import type { IconType } from "react-icons";
-import {
-  BiArrowFromLeft,
-  BiArrowFromRight,
-  BiMoon,
-  BiSun,
-} from "react-icons/bi";
+import { BiArrowFromLeft, BiArrowFromRight } from "react-icons/bi";
 import { twMerge } from "tailwind-merge";
 import SidebarRoutes from "../data/SidebarRoutes";
 import "../globals.css";
 import { SidebarContext, useSidebarContext } from "../hooks/SidebarContext";
-import { appliedTheme, toggleTheme } from "../utils/toggleTheme";
+import { ThemeToggleButton } from "./ThemeToggleButton";
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -32,7 +27,6 @@ interface SidebarItemProps {
 
 export default function Sidebar({ children }: SidebarProps) {
   const [collapsedSidebar, setCollapsedSidebar] = useState(true);
-  const [isDark, setIsDark] = useState(false);
 
   const routes = useMemo(() => SidebarRoutes, []);
 
@@ -53,10 +47,6 @@ export default function Sidebar({ children }: SidebarProps) {
     );
   }, [collapsedSidebar]);
 
-  useEffect(() => {
-    appliedTheme();
-  }, []);
-
   return (
     <aside className="flex h-screen">
       <nav className="h-full flex flex-col border-r border-fill-100 shadow-sm">
@@ -69,24 +59,7 @@ export default function Sidebar({ children }: SidebarProps) {
           >
             Entele
           </h1>
-          <button
-            type="button"
-            onClick={() => {
-              toggleTheme();
-              // TODO: Fix icon not respecting theme on refresh
-              setIsDark(!isDark);
-            }}
-            className={twMerge(
-              "p-1.5 mr-1 rounded-lg bg-fill-100 hover:bg-fill-200 transition duration-300",
-              collapsedSidebar ? "block" : "hidden",
-            )}
-          >
-            {isDark ? (
-              <BiMoon size={25} className="text-base-950" />
-            ) : (
-              <BiSun size={25} className="text-base-950" />
-            )}
-          </button>
+          <ThemeToggleButton collapsedSidebar={collapsedSidebar} />
           <button
             type="button"
             onClick={() => setCollapsedSidebar(!collapsedSidebar)}
@@ -161,10 +134,10 @@ export function SidebarItem({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={twMerge(
-        `relative flex items-center p-2 rounded-md my-1 text-base-500`,
+        "relative flex items-center p-2 rounded-md my-1 text-base-500",
         active
-          ? "text-primary-500 bg-primary-50 hover:bg-primary-100 duration-300"
-          : "hover:bg-fill-100 duration-300",
+          ? "text-primary-500 bg-primary-100 hover:shadow-[0_0px_30px_rgba(0,0,0,0.25)] hover:shadow-primary-100 hover:scale-105 hover:-translate-y-0.5 duration-300"
+          : "hover:bg-fill-100 duration-300 hover:-translate-y-1",
       )}
     >
       <Icon size={25} />

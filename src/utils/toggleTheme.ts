@@ -18,8 +18,10 @@ export function appliedTheme() {
     if (storedTheme === 'dark') {
         document.documentElement.classList.remove('light');
         document.documentElement.classList.add('dark');
+        return true
     } else {
         document.documentElement.classList.remove('dark');
         document.documentElement.classList.add('light');
+        return false
     }
 }

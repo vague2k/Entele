@@ -1,3 +1,4 @@
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import axios from "axios";
 import { useEffect, useReducer, useState } from "react";
 import toast from "react-hot-toast";
@@ -33,6 +34,7 @@ export default function ClientsView() {
     email: "",
     amountOfOrders: 0,
   });
+  const [animationParent] = useAutoAnimate();
 
   function onClientRecordClick(
     id: string,
@@ -68,7 +70,7 @@ export default function ClientsView() {
     fetchData();
   }, []);
   return (
-    <div className="p-[17px]">
+    <div className="p-[17px]" ref={animationParent}>
       <div className="flex pb-4 gap-x-3 justify-center items-center">
         <h1 className="text-base-950 font-semibold text-2xl whitespace-nowrap">
           All your clients in one place!

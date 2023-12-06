@@ -14,6 +14,7 @@
     "@astrojs/react": "^3.0.4",
     "@astrojs/tailwind": "^5.0.2",
     "@astrojs/vercel": "^5.2.0",
+    "@formkit/auto-animate": "^0.8.1",
     "@types/react": "^18.2.32",
     "@types/react-dom": "^18.2.14",
     "@xata.io/client": "^0.26.9",
