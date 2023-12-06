@@ -13,52 +13,35 @@ export default [
         label: "Dashboard",
         active: window.location.pathname === "/",
         href: '/',
-        subpages: []
     },
     {
         Icon: BiUserCircle,
         label: "Clients",
         active: window.location.pathname.includes("/clients"),
         href: '/clients/view',
-        subpages: []
     },
     {
         Icon: BiPackage,
         label: "Orders",
         active: window.location.pathname.includes("/orders"),
         href: '/orders/view',
-        subpages: [
-            {
-                label: "View Orders",
-                href: "/orders/view",
-                active: window.location.pathname === "/orders/view",
-            },
-            {
-                label: "See Details",
-                href: "/orders/details",
-                active: window.location.pathname === "/orders/details",
-            },
-        ]
     },
     {
         Icon: BiCog,
         label: "Settings",
         active: window.location.pathname === "/settings",
         href: '/settings',
-        subpages: []
     },
     {
         Icon: BiHelpCircle,
         label: "Help",
         active: window.location.pathname === "/help",
         href: '/help',
-        subpages: []
     },
     {
         Icon: BiLogOut,
         label: "Logout",
         active: window.location.pathname === "/logout",
         href: '/logout',
-        subpages: []
     },
 ]

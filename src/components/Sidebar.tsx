@@ -11,18 +11,11 @@ interface SidebarProps {
   children: React.ReactNode;
 }
 
-interface Subpage {
-  label: string;
-  href: string;
-  active: boolean;
-}
-
 interface SidebarItemProps {
   Icon: IconType;
   label: string;
   active: boolean;
   href: string;
-  subpages: Subpage[];
 }
 
 export default function Sidebar({ children }: SidebarProps) {
@@ -105,34 +98,12 @@ export default function Sidebar({ children }: SidebarProps) {
   );
 }
 
-export function SidebarItem({
-  Icon,
-  label,
-  active,
-  href,
-  subpages,
-}: SidebarItemProps) {
+export function SidebarItem({ Icon, label, active, href }: SidebarItemProps) {
   const expanded = useSidebarContext();
-  const [isHovered, setIsHovered] = useState(false);
-
-  let timer = 0;
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-    clearTimeout(timer);
-  };
-
-  const handleMouseLeave = () => {
-    timer = setTimeout(() => {
-      setIsHovered(false);
-    }, 50);
-  };
 
   return (
     <a
       href={href}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       className={twMerge(
         "relative flex items-center p-2 rounded-md my-1 text-base-500",
         active
@@ -149,39 +120,6 @@ export function SidebarItem({
       >
         {label}
       </span>
-
-      {isHovered && subpages.length > 0 && (
-        <div
-          className={twMerge(
-            `absolute flex flex-col whitespace-nowrap left-full rounded-md w-fit p-2 ml-3 
-                        text-base-400 gap-y-1 bg-fill-0 text-sm shadow-xl transition-all`,
-            isHovered
-              ? "visible opacity-100 translate-x-3 duration-300 ease-in"
-              : "invisible opacity-0 -translate-x-3 duration-300 ease-in",
-          )}
-        >
-          <span className="font-semibold text-lg">{label}</span>
-          {subpages.map((subpage) => (
-            <SubpageButtonLink key={subpage.href} {...subpage} />
-          ))}
-        </div>
-      )}
-    </a>
-  );
-}
-
-export function SubpageButtonLink({ label, active, href }: Subpage) {
-  return (
-    <a
-      className={twMerge(
-        "p-2 rounded-md hover:bg-neutral-200 duration-300",
-        active
-          ? "text-primary-500 bg-primary-50 hover:bg-primary-100 duration-300"
-          : "hover:bg-fill-100 duration-300",
-      )}
-      href={href}
-    >
-      {label}
     </a>
   );
 }
