@@ -2,11 +2,11 @@ import axios from "axios";
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import toast from "react-hot-toast";
 import { BiUserPlus, BiX } from "react-icons/bi";
+import type { ModalProps } from "../../types";
 import Box from "../Box";
 import Button from "../Button";
 import Input from "../Input";
 import { OnSuccessModal } from "./GeneralModals";
-import type { ModalProps } from "../../types";
 
 export default function CreateClientModal({
   isOpen,

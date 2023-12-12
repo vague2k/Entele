@@ -2,11 +2,11 @@ import axios from "axios";
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import toast from "react-hot-toast";
 import { BiEdit, BiX } from "react-icons/bi";
+import type { EditClientRecordModalProps } from "../../types";
 import Box from "../Box";
 import Button from "../Button";
 import Input from "../Input";
 import { ConfirmActionModal, OnSuccessModal } from "./GeneralModals";
-import type { EditClientRecordModalProps } from "../../types";
 
 export default function EditRecordModal({
   isOpen,
