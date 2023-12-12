@@ -1,4 +1,4 @@
-export function formatDate(dateString: string) {
+export function formatDate(date: Date) {
     const options = {
         year: 'numeric',
         month: 'numeric',
@@ -8,5 +8,5 @@ export function formatDate(dateString: string) {
         hour12: true,
         timeZone: 'America/New_York',
     }
-    return new Date(dateString).toLocaleDateString(undefined, options)
+    return new Date(date).toLocaleDateString(undefined, options)
 }
