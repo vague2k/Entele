@@ -6,17 +6,17 @@ import Box from "../Box";
 import Button from "../Button";
 import Input from "../Input";
 import { ConfirmActionModal, OnSuccessModal } from "./GeneralModals";
-import type { ModalProps } from "./types";
+import type { EditClientRecordModalProps } from "../../types";
 
 export default function EditRecordModal({
   isOpen,
   onClose,
   clientInfo,
   refreshIfDataChange,
-}: ModalProps) {
+}: EditClientRecordModalProps) {
   if (!isOpen) return null;
 
-  const [id, name, email, amountOfOrders] = clientInfo || ["", "", "", 0];
+  const { id, name, email, amountOfOrders } = clientInfo;
 
   const [clientFormData, setClientFormData] = useState({
     id: "",
@@ -88,8 +88,6 @@ export default function EditRecordModal({
       }
     }
   }
-
-  // const editmessage = `${clientFormData.name}, ${clientFormData.email}, ${clientFormData.orderAmount}`
 
   return (
     <div className="flex items-center justify-center fixed inset-0 bg-fill-400 bg-opacity-30 backdrop-blur-sm">
