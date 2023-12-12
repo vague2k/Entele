@@ -6,13 +6,13 @@ import Box from "../Box";
 import Button from "../Button";
 import Input from "../Input";
 import { OnSuccessModal } from "./GeneralModals";
-import type { ModalProps } from "./types";
+import type { ModalProps } from "../../types";
 
 export default function CreateClientModal({
   isOpen,
   onClose,
   refreshIfDataChange,
-}: ModalProps & { refreshIfDataChange: () => void }) {
+}: ModalProps) {
   if (!isOpen) return null;
 
   const [clientFormData, setClientFormData] = useState({
