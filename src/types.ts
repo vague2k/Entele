@@ -7,7 +7,7 @@ export type ModalProps = {
 }
 
 export interface EditClientRecordModalProps extends ModalProps {
-    clientInfo: Clients
+    currentClient: Clients
 }
 
 export interface DeleteAllClientsModalProps extends ModalProps {
@@ -17,4 +17,9 @@ export interface DeleteAllClientsModalProps extends ModalProps {
 export enum TableType {
     ClientsTable = "ClientsTable",
     OrdersTable = "OrdersTable",
+}
+
+export enum ActionBarType {
+    ClientsActionBar = "ClientsActionBar",
+    OrdersActionBar = "OrdersActionBar",
 }
