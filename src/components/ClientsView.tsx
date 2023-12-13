@@ -2,12 +2,12 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import axios from "axios";
 import { useEffect, useReducer, useState } from "react";
 import toast from "react-hot-toast";
-import { BiConfused, BiRefresh, BiTrash, BiUserPlus } from "react-icons/bi";
+import { BiConfused } from "react-icons/bi";
 import "../globals.css";
-import { TableType } from "../types";
+import { ActionBarType, TableType } from "../types";
 import type { ClientsRecord } from "../xata";
+import ActionBar from "./ActionBar";
 import Box from "./Box";
-import Button from "./Button";
 import Input from "./Input";
 import Table from "./Table";
 import CreateClientModal from "./modals/CreateClientModal";
@@ -67,47 +67,22 @@ export default function ClientsView() {
         </h1>
         <Input placeholder="Search" />
       </div>
-      <div className="flex pb-4 justify-center items-center">
-        <Box className="flex flex-row gap-x-3 h-fit">
-          <Button
-            type="button"
-            onClick={() => window.location.reload()}
-            className="p-3"
-          >
-            <BiRefresh size={20} />
-          </Button>
-          <Button onClick={() => dispatchModal({ type: "openCreateClient" })}>
-            <BiUserPlus size={20} />
-            Create Client
-          </Button>
-          <Button onClick={() => dispatchModal({ type: "openDeleteAll" })}>
-            <BiTrash size={20} />
-            Delete All
-          </Button>
-        </Box>
-      </div>
 
-      <Box className="overflow-y-auto max-h-[76vh]">
-        {listOfClients.length <= 0 && (
-          <div className="mt-40 flex flex-col gap-y-3 items-center text-base-300">
-            <BiConfused size={100} />
-            <h1 className="font-semibold text-3xl">
-              It looks like you have no clients!
-            </h1>
-            <h1 className="font-medium text-md">
-              Try creating one using the create client button above
-            </h1>
-          </div>
-        )}
+      <ActionBar
+        type={ActionBarType.ClientsActionBar}
+        createCallback={() => {
+          dispatchModal({ type: "openCreateClient" });
+        }}
+        deleteCallback={() => {
+          dispatchModal({ type: "openDeleteAll" });
+        }}
+      />
 
-        {listOfClients.length > 0 && (
-          <Table
-            type={TableType.ClientsTable}
-            clientData={listOfClients}
-            callback={onClientRecordClick}
-          />
-        )}
-      </Box>
+      <Table
+        type={TableType.ClientsTable}
+        clientData={listOfClients}
+        callback={onClientRecordClick}
+      />
 
       {/* We call the dispatch function for the Modal's onClose prop 
       again here becuase dispatching toggles the boolean state */}
@@ -123,7 +98,7 @@ export default function ClientsView() {
       <EditRecordModal
         onClose={() => dispatchModal({ type: "openEditRecord" })}
         isOpen={modalState.isEditRecordOpen}
-        clientInfo={{
+        currentClient={{
           id: clientInfo.id,
           name: clientInfo.name,
           email: clientInfo.email,
