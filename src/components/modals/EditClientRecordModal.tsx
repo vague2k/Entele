@@ -11,14 +11,12 @@ import { ConfirmActionModal, OnSuccessModal } from "./GeneralModals";
 export default function EditRecordModal({
   isOpen,
   onClose,
-  clientInfo,
+  currentClient,
   refreshIfDataChange,
 }: EditClientRecordModalProps) {
   if (!isOpen) return null;
 
-  const { id, name, email, amountOfOrders } = clientInfo;
-
-  const [clientFormData, setClientFormData] = useState({
+  const [editedClient, setEditedClient] = useState({
     id: "",
     name: "",
     email: "",
@@ -33,16 +31,19 @@ export default function EditRecordModal({
     const { name, value } = event.target;
     const isNumericValue =
       value !== "" && name === "amountOfOrders" ? parseInt(value, 10) : value;
-    setClientFormData({ ...clientFormData, [name]: isNumericValue });
+    setEditedClient({ ...editedClient, [name]: isNumericValue });
   }
 
   async function deleteRecord(event: SyntheticEvent) {
     event.preventDefault();
 
     try {
-      const response = await axios.delete(`/api/clients/${id}/delete`, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await axios.delete(
+        `/api/clients/${currentClient.id}/delete`,
+        {
+          headers: { "Content-Type": "application/json" },
+        },
+      );
 
       refreshIfDataChange();
       setSuccessHeader(response.data.message);
@@ -64,8 +65,8 @@ export default function EditRecordModal({
 
     try {
       const response = await axios.put(
-        `/api/clients/${id}/update`,
-        clientFormData,
+        `/api/clients/${currentClient.id}/update`,
+        editedClient,
         {
           headers: { "Content-Type": "application/json" },
         },
@@ -113,20 +114,20 @@ export default function EditRecordModal({
             <Input
               onChange={onChange}
               name="name"
-              value={clientFormData.name}
-              placeholder={`Current name: ${name}`}
+              value={editedClient.name}
+              placeholder={`Current name: ${currentClient.name}`}
             />
             <Input
               onChange={onChange}
               name="email"
-              value={clientFormData.email}
-              placeholder={`Current email: ${email}`}
+              value={editedClient.email}
+              placeholder={`Current email: ${currentClient.email}`}
             />
             <Input
               onChange={onChange}
               name="amountOfOrders"
-              value={clientFormData.amountOfOrders}
-              placeholder={`Current order amount: ${amountOfOrders}`}
+              value={editedClient.amountOfOrders}
+              placeholder={`Current order amount: ${currentClient.amountOfOrders}`}
             />
           </div>
 
@@ -165,8 +166,8 @@ export default function EditRecordModal({
           callback={(event) => {
             deleteRecord(event);
           }}
-          header={`Delete ${clientFormData.name}?`}
-          description={`You're about about to delete ${clientFormData.name}. Would you like to continue?`}
+          header={`Delete ${editedClient.name}?`}
+          description={`You're about about to delete ${editedClient.name}. Would you like to continue?`}
         />
       )}
 
