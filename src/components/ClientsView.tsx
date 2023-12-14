@@ -86,7 +86,7 @@ export default function ClientsView() {
       again here becuase dispatching toggles the boolean state */}
       <DeleteAllClientsModal
         onClose={() => dispatchModal({ type: "openDeleteAll" })}
-        isOpen={modalState.isDeleteAllOpen}
+        isOpen={modalState.isDeleteAllOpen as true}
         totalRecords={listOfClients.length}
         refreshIfDataChange={async () => {
           await fetchData();
@@ -95,7 +95,7 @@ export default function ClientsView() {
 
       <EditRecordModal
         onClose={() => dispatchModal({ type: "openEditRecord" })}
-        isOpen={modalState.isEditRecordOpen}
+        isOpen={modalState.isEditRecordOpen as true}
         currentClient={{
           id: clientInfo.id,
           name: clientInfo.name,
@@ -109,7 +109,7 @@ export default function ClientsView() {
 
       <CreateClientModal
         onClose={() => dispatchModal({ type: "openCreateClient" })}
-        isOpen={modalState.isCreateClientOpen}
+        isOpen={modalState.isCreateClientOpen as true}
         refreshIfDataChange={async () => {
           await fetchData();
         }}

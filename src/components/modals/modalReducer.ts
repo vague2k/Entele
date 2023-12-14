@@ -1,11 +1,12 @@
 export interface ModalReducerState {
-    isCreateClientOpen: boolean
-    isDeleteAllOpen: boolean
-    isEditRecordOpen: boolean
+    isCreateClientOpen?: boolean
+    isDeleteAllOpen?: boolean
+    isEditRecordOpen?: boolean
+    isCreateOrderOpen?: boolean
 }
 
 export interface ModalAction {
-    type: "openCreateClient" | "openDeleteAll" | "openEditRecord"
+    type: "openCreateClient" | "openDeleteAll" | "openEditRecord" | "openCreateOrder"
 }
 
 
@@ -21,6 +22,8 @@ export default function modalReducer(state: ModalReducerState, action: ModalActi
             return { ...state, isDeleteAllOpen: !state.isDeleteAllOpen }
         case "openEditRecord":
             return { ...state, isEditRecordOpen: !state.isEditRecordOpen }
+        case "openCreateOrder":
+            return { ...state, isCreateOrderOpen: !state.isCreateOrderOpen }
         default:
             throw new Error(`${action.type} does not exist on ModalAction`)
     }

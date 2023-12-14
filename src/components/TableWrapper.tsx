@@ -12,10 +12,12 @@ const tableHeaders = {
   // TODO: Remember to update this when orders table is being worked on
   [TableType.OrdersTable]: [
     { id: 1, name: "Name" },
-    { id: 2, name: "Email" },
-    { id: 3, name: "# of Orders" },
+    { id: 2, name: "Total Units" },
+    { id: 3, name: "Completed Order" },
     { id: 4, name: "Created At" },
-    { id: 5, name: "Last Updated" },
+    { id: 5, name: "Total" },
+    { id: 6, name: "Average Price" },
+    { id: 7, name: "Last Updated" },
   ],
 };
 
