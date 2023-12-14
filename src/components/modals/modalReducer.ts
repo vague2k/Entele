@@ -9,7 +9,7 @@ export interface ModalAction {
 }
 
 
-// Since our reducer func that the dispatchModal in ClientsView func uses returns a <state_value> boolean if a
+// Since our reducer func that the dispatchModal in View components func uses returns a <state_value> boolean if a
 // case is satisfied, while at the same time having dispatchModal return void, 
 // we can make sure our onClose prop in our modals takes a () => void function as its value
 

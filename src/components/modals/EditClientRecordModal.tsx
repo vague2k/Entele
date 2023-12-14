@@ -2,23 +2,21 @@ import axios from "axios";
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import toast from "react-hot-toast";
 import { BiEdit, BiX } from "react-icons/bi";
+import type { EditClientRecordModalProps } from "../../types";
 import Box from "../Box";
 import Button from "../Button";
 import Input from "../Input";
 import { ConfirmActionModal, OnSuccessModal } from "./GeneralModals";
-import type { ModalProps } from "./types";
 
 export default function EditRecordModal({
   isOpen,
   onClose,
-  clientInfo,
+  currentClient,
   refreshIfDataChange,
-}: ModalProps) {
+}: EditClientRecordModalProps) {
   if (!isOpen) return null;
 
-  const [id, name, email, amountOfOrders] = clientInfo || ["", "", "", 0];
-
-  const [clientFormData, setClientFormData] = useState({
+  const [editedClient, setEditedClient] = useState({
     id: "",
     name: "",
     email: "",
@@ -33,16 +31,19 @@ export default function EditRecordModal({
     const { name, value } = event.target;
     const isNumericValue =
       value !== "" && name === "amountOfOrders" ? parseInt(value, 10) : value;
-    setClientFormData({ ...clientFormData, [name]: isNumericValue });
+    setEditedClient({ ...editedClient, [name]: isNumericValue });
   }
 
   async function deleteRecord(event: SyntheticEvent) {
     event.preventDefault();
 
     try {
-      const response = await axios.delete(`/api/clients/${id}/delete`, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await axios.delete(
+        `/api/clients/${currentClient.id}/delete`,
+        {
+          headers: { "Content-Type": "application/json" },
+        },
+      );
 
       refreshIfDataChange();
       setSuccessHeader(response.data.message);
@@ -64,8 +65,8 @@ export default function EditRecordModal({
 
     try {
       const response = await axios.put(
-        `/api/clients/${id}/update`,
-        clientFormData,
+        `/api/clients/${currentClient.id}/update`,
+        editedClient,
         {
           headers: { "Content-Type": "application/json" },
         },
@@ -88,8 +89,6 @@ export default function EditRecordModal({
       }
     }
   }
-
-  // const editmessage = `${clientFormData.name}, ${clientFormData.email}, ${clientFormData.orderAmount}`
 
   return (
     <div className="flex items-center justify-center fixed inset-0 bg-fill-400 bg-opacity-30 backdrop-blur-sm">
@@ -115,20 +114,20 @@ export default function EditRecordModal({
             <Input
               onChange={onChange}
               name="name"
-              value={clientFormData.name}
-              placeholder={`Current name: ${name}`}
+              value={editedClient.name}
+              placeholder={`Current name: ${currentClient.name}`}
             />
             <Input
               onChange={onChange}
               name="email"
-              value={clientFormData.email}
-              placeholder={`Current email: ${email}`}
+              value={editedClient.email}
+              placeholder={`Current email: ${currentClient.email}`}
             />
             <Input
               onChange={onChange}
               name="amountOfOrders"
-              value={clientFormData.amountOfOrders}
-              placeholder={`Current order amount: ${amountOfOrders}`}
+              value={editedClient.amountOfOrders}
+              placeholder={`Current order amount: ${currentClient.amountOfOrders}`}
             />
           </div>
 
@@ -167,8 +166,8 @@ export default function EditRecordModal({
           callback={(event) => {
             deleteRecord(event);
           }}
-          header={`Delete ${clientFormData.name}?`}
-          description={`You're about about to delete ${clientFormData.name}. Would you like to continue?`}
+          header={`Delete ${editedClient.name}?`}
+          description={`You're about about to delete ${editedClient.name}. Would you like to continue?`}
         />
       )}
 
