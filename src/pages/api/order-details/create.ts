@@ -7,8 +7,16 @@ export const POST: APIRoute = async ({ request }) => {
     try {
 
         const formBody: OrderDetails = await request.json();
+<<<<<<< Updated upstream
         if (
             !formBody.units
+=======
+
+        if (
+            !formBody.clientName
+            || !formBody.clientEmail
+            || !formBody.units
+>>>>>>> Stashed changes
             || !formBody.unitPrice
             || !formBody.garmentBrand
             || !formBody.garmentType
@@ -21,6 +29,19 @@ export const POST: APIRoute = async ({ request }) => {
             );
         }
 
+<<<<<<< Updated upstream
+=======
+        const clientId = await xata.db.clients.filter({ name: formBody.clientName, email: formBody.clientEmail }).select(["id"]).getMany()
+
+        if (clientId.length <= 0) {
+            return new Response(
+                JSON.stringify({ message: "This client does not exist, please check again!" }),
+                { status: 400 }
+            );
+        }
+
+        formBody.clientId = clientId[0].id
+>>>>>>> Stashed changes
         formBody.subtotal = formBody.unitPrice * formBody.units
 
         const newOrderDetail = await xata.db.order_details.create(formBody);
