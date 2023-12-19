@@ -3,20 +3,17 @@ import { XataClient, type OrderDetails } from "../../../xata";
 
 const xata = new XataClient({ apiKey: import.meta.env.XATA_API_KEY })
 
+// The idea for route, is to create an order detail with a clientId attatched to it. 
+// And based on the clientId, we can create an order out of it at a later time.
 export const POST: APIRoute = async ({ request }) => {
     try {
 
         const formBody: OrderDetails = await request.json();
-<<<<<<< Updated upstream
-        if (
-            !formBody.units
-=======
 
         if (
             !formBody.clientName
             || !formBody.clientEmail
             || !formBody.units
->>>>>>> Stashed changes
             || !formBody.unitPrice
             || !formBody.garmentBrand
             || !formBody.garmentType
@@ -29,19 +26,16 @@ export const POST: APIRoute = async ({ request }) => {
             );
         }
 
-<<<<<<< Updated upstream
-=======
         const clientId = await xata.db.clients.filter({ name: formBody.clientName, email: formBody.clientEmail }).select(["id"]).getMany()
 
         if (clientId.length <= 0) {
             return new Response(
-                JSON.stringify({ message: "This client does not exist, please check again!" }),
+                JSON.stringify({ message: "This client does not exist, please check the client's name and email again!" }),
                 { status: 400 }
             );
         }
 
         formBody.clientId = clientId[0].id
->>>>>>> Stashed changes
         formBody.subtotal = formBody.unitPrice * formBody.units
 
         const newOrderDetail = await xata.db.order_details.create(formBody);
