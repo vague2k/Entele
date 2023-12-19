@@ -24,18 +24,15 @@ const tables = [
         defaultValue: "no@email.given",
       },
     ],
-    revLinks: [{ column: "client", table: "orders" }],
   },
   {
     name: "orders",
     columns: [
-      { name: "client", type: "link", link: { table: "clients" } },
       { name: "totalAmount", type: "float" },
       { name: "averageUnitPrice", type: "float" },
       { name: "totalUnits", type: "int" },
       { name: "orderDate", type: "string" },
       { name: "complete", type: "bool", defaultValue: "false" },
-      { name: "orderDetails", type: "link", link: { table: "order_details" } },
     ],
   },
   {
@@ -48,8 +45,11 @@ const tables = [
       { name: "garmentColor", type: "string" },
       { name: "unitPrice", type: "float" },
       { name: "subtotal", type: "float" },
+      { name: "clientName", type: "string" },
+      { name: "clientEmail", type: "string" },
+      { name: "clientId", type: "string" },
+      { name: "orderId", type: "string" },
     ],
-    revLinks: [{ column: "orderDetails", table: "orders" }],
   },
 ] as const;
 
