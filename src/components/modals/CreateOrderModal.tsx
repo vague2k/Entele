@@ -1,15 +1,8 @@
-<<<<<<< Updated upstream
-=======
 import { useState, type ChangeEvent } from "react";
->>>>>>> Stashed changes
 import { BiX } from "react-icons/bi";
 import type { ModalProps } from "../../types";
 import Box from "../Box";
 import Button from "../Button";
-<<<<<<< Updated upstream
-
-export default function CreateOrderModal({ isOpen, onClose }: ModalProps) {
-=======
 import Input from "../Input";
 
 export default function CreateOrderModal({ isOpen, onClose }: ModalProps) {
@@ -33,16 +26,11 @@ export default function CreateOrderModal({ isOpen, onClose }: ModalProps) {
     setForm({ ...form, [name]: isNumericValue });
   }
 
->>>>>>> Stashed changes
   if (!isOpen) return null;
 
   return (
     <div className="flex items-center justify-center fixed inset-0 bg-fill-400 bg-opacity-30 backdrop-blur-sm">
-<<<<<<< Updated upstream
-      <Box className="relative h-fit w-fit max-w-lg p-8">
-=======
       <Box className="relative h-fit w-fit max-w-5xl p-8">
->>>>>>> Stashed changes
         <form>
           <Button
             onClick={onClose}
@@ -51,9 +39,6 @@ export default function CreateOrderModal({ isOpen, onClose }: ModalProps) {
           >
             <BiX size={20} />
           </Button>
-<<<<<<< Updated upstream
-          <h1>CREATE orders modal</h1>
-=======
           <h1 className="font-bold text-2xl">Create an order!</h1>
           <p className="font-normal text-sm text-base-400">
             Fill out the field to create specific details, once your done
@@ -109,7 +94,6 @@ export default function CreateOrderModal({ isOpen, onClose }: ModalProps) {
               placeholder="Unit Price?"
             />
           </div>
->>>>>>> Stashed changes
           <Button
             onClick={onClose}
             type="button"
@@ -117,8 +101,6 @@ export default function CreateOrderModal({ isOpen, onClose }: ModalProps) {
           >
             Cancel
           </Button>
-<<<<<<< Updated upstream
-=======
           <Button
             type="submit"
             className="bg-primary-500 hover:bg-primary-400 duration-300 text-neutral-50"
@@ -131,7 +113,6 @@ export default function CreateOrderModal({ isOpen, onClose }: ModalProps) {
           >
             Submit Order
           </Button>
->>>>>>> Stashed changes
         </form>
       </Box>
     </div>
