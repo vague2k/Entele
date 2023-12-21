@@ -26,16 +26,19 @@ export const POST: APIRoute = async ({ request }) => {
             );
         }
 
-        const clientId = await xata.db.clients.filter({ name: formBody.clientName, email: formBody.clientEmail }).select(["id"]).getMany()
+        const clientExists = await xata.db.clients
+            .filter({ name: formBody.clientName, email: formBody.clientEmail })
+            .getMany()
 
-        if (clientId.length <= 0) {
+        if (clientExists.length <= 0) {
             return new Response(
-                JSON.stringify({ message: "This client does not exist, please check the client's name and email again!" }),
+                JSON.stringify({
+                    message: "This client does not exist, please check the client's name and email again!"
+                }),
                 { status: 400 }
             );
         }
 
-        formBody.clientId = clientId[0].id
         formBody.subtotal = formBody.unitPrice * formBody.units
 
         const newOrderDetail = await xata.db.order_details.create(formBody);
