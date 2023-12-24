@@ -7,13 +7,18 @@ export const DELETE: APIRoute = async ({ params }) => {
     const id = params.id
 
     if (!id) {
-        return new Response(JSON.stringify({ message: "A client id is required" }), { status: 400 })
+        return new Response(
+            JSON.stringify(
+                { message: "/clients/[id]/delete is missing a url param. This should be a client's record id" }
+            ),
+            { status: 400 }
+        );
     }
 
     try {
         const deletedClient = await xata.db.clients.delete(id);
         return new Response(
-            JSON.stringify({ deletedClient: deletedClient, message: "Client has been deleted." }),
+            JSON.stringify({ deletedClient, message: "Client has been deleted." }),
             {
                 status: 200,
                 headers: { "Content-Type": "application/json" }
