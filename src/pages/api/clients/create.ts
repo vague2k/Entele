@@ -11,7 +11,6 @@ const xata = new XataClient({ apiKey: import.meta.env.XATA_API_KEY })
 
 export const POST: APIRoute = async ({ request }) => {
     try {
-
         const formBody: NewClientFormBody = await request.json();
         if (!formBody.name || !formBody.email) {
             return new Response(
@@ -20,6 +19,7 @@ export const POST: APIRoute = async ({ request }) => {
             );
         }
 
+        // TODO: Add a check to see if clients exists already
         const newClient = await xata.db.clients.create(formBody);
 
         return new Response(
