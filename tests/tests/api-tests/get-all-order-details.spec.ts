@@ -1,5 +1,5 @@
 import test, { expect } from "@playwright/test";
-import type { OrderDetails } from "../../src/xata";
+import type { OrderDetails } from "../../../src/xata";
 
 test('Get all order_details records', async ({ request }) => {
 
