@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { BiTrash, BiX } from "react-icons/bi";
+import { BiX } from "react-icons/bi";
 import type { DeleteAllClientsModalProps } from "../../types";
-import Box from "../Box";
-import Button from "../Button";
+import Box from "../ui/Box";
+import Button from "../ui/Button";
 import { OnSuccessModal } from "./GeneralModals";
 
 export default function ConfirmDeleteModal({
@@ -40,27 +40,26 @@ export default function ConfirmDeleteModal({
   return (
     <div className="flex items-center justify-center fixed inset-0 bg-fill-400 bg-opacity-30 backdrop-blur-sm">
       {!onSuccess && (
-        <Box className="relative h-fit w-fit max-w-lg p-8">
-          <div className="flex flex-col justify-center gap-y-3 items-center">
+        <Box className="relative h-fit w-full rounded-xl max-w-lg p-7">
+          <div className="relative items-center">
             <Button
               onClick={onClose}
               type="button"
-              className="absolute right-3 top-3 bg-transparent hover:bg-fill-100 duration-300 text-base-950"
+              className="absolute -right-5 -top-5 bg-transparent hover:bg-fill-100 duration-300 text-base-950"
             >
               <BiX size={20} />
             </Button>
-            <div className="flex justify-center items-center w-11 h-11 rounded-full bg-red-200">
-              <BiTrash size={25} className="text-red-500" />
+            <div className="mr-auto">
+              <h1 className="font-medium text-lg text-left text-base-900">
+                Delete all {totalRecords} records of clients?
+              </h1>
+              <p className="font-regular text-sm text-left w-96 text-base-500">
+                Are you sure you want to delete all records of clients? This
+                action cannot be undone.
+              </p>
             </div>
-            <h1 className="font-semibold text-lg text-base-950">
-              Delete all {totalRecords} records of clients?
-            </h1>
-            <p className="font-regular text-sm text-center text-base-500">
-              Are you sure you want to delete all records of clients? This
-              action cannot be undone
-            </p>
           </div>
-          <div className="flex justify-center items-center gap-x-3 pt-3">
+          <div className="flex justify-end items-center gap-x-2 pt-6">
             <Button
               onClick={onClose}
               type="button"
@@ -73,7 +72,7 @@ export default function ConfirmDeleteModal({
               type="button"
               className="bg-red-600 hover:bg-red-500 duration-300 text-neutral-50"
             >
-              Yes, Delete all records
+              Yes, I'm sure
             </Button>
           </div>
         </Box>
@@ -81,6 +80,7 @@ export default function ConfirmDeleteModal({
       {onSuccess && (
         <OnSuccessModal
           header="All clients have been deleted"
+          description="Hopefully this wasn't a accident..."
           onClose={onClose}
         />
       )}

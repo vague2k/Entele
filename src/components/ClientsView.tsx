@@ -2,16 +2,18 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import axios from "axios";
 import { useEffect, useReducer, useState } from "react";
 import toast from "react-hot-toast";
+import { BiChevronDown } from "react-icons/bi";
 import "../globals.css";
 import { ActionBarType, TableType } from "../types";
 import type { ClientsRecord } from "../xata";
 import ActionBar from "./ActionBar";
-import Input from "./Input";
 import Table from "./Table";
 import CreateClientModal from "./modals/CreateClientModal";
 import DeleteAllClientsModal from "./modals/DeleteAllClientsModal";
 import EditRecordModal from "./modals/EditClientRecordModal";
 import modalReducer from "./modals/modalReducer";
+import Button from "./ui/Button";
+import Input from "./ui/Input";
 
 export default function ClientsView() {
   const [animationParent] = useAutoAnimate();
@@ -59,13 +61,6 @@ export default function ClientsView() {
   }, []);
   return (
     <div className="p-[17px]" ref={animationParent}>
-      <div className="flex pb-4 gap-x-3 justify-center items-center">
-        <h1 className="text-base-950 font-semibold text-2xl whitespace-nowrap">
-          All your clients in one place!
-        </h1>
-        <Input placeholder="Search" />
-      </div>
-
       <ActionBar
         type={ActionBarType.ClientsActionBar}
         createCallback={() => {
@@ -75,6 +70,19 @@ export default function ClientsView() {
           dispatchModal({ type: "openDeleteAll" });
         }}
       />
+
+      <div className="flex items-center">
+        <Input placeholder="Search" className="w-1/2 my-2" />
+        <div className="flex ml-auto gap-x-2">
+          <Button>Table View</Button>
+          <Button className="px-4">
+            <span className="flex items-center gap-x-1">
+              Columns
+              <BiChevronDown />
+            </span>
+          </Button>
+        </div>
+      </div>
 
       <Table
         type={TableType.ClientsTable}

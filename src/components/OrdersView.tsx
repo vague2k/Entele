@@ -2,9 +2,9 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useReducer } from "react";
 import { ActionBarType } from "../types";
 import ActionBar from "./ActionBar";
-import Input from "./Input";
 import CreateOrderModal from "./modals/CreateOrderModal";
 import modalReducer from "./modals/modalReducer";
+import Input from "./ui/Input";
 
 export default function OrdersView() {
   const [animationParent] = useAutoAnimate();

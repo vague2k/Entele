@@ -11,6 +11,7 @@ const xata = new XataClient({ apiKey: import.meta.env.XATA_API_KEY })
 
 export const POST: APIRoute = async ({ request }) => {
     try {
+        // TODO: Handle error if email format is incorrect
         const formBody: NewClientFormBody = await request.json();
         if (!formBody.name || !formBody.email) {
             return new Response(
