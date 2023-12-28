@@ -1,9 +1,9 @@
-import { BiConfused } from "react-icons/bi";
+import { BiConfused, BiPackage } from "react-icons/bi";
 import { TableType } from "../types";
 import { formatDate } from "../utils";
 import type { ClientsRecord, OrdersRecord } from "../xata";
-import Box from "./Box";
 import TableWrapper from "./TableWrapper";
+import Box from "./ui/Box";
 
 interface TableProps {
   clientData?: ClientsRecord[];
@@ -20,7 +20,7 @@ export default function Table({
 }: TableProps) {
   if (type === "ClientsTable" && clientData !== undefined) {
     return (
-      <Box className="overflow-y-auto max-h-[76vh]">
+      <Box className="overflow-y-auto max-h-[81vh] bg-transparent border border-fill-200/50 shadow-md">
         {clientData.length <= 0 && (
           <div className="mt-40 flex flex-col gap-y-3 items-center text-base-300">
             <BiConfused size={100} />
@@ -61,10 +61,15 @@ export default function Table({
                 role="button"
                 tabIndex={0}
               >
-                <td className="table-record">{index + 1}</td>
+                <td className="table-record w-[110px] block truncate">
+                  {client.id}
+                </td>
                 <td className="table-record">{client.name}</td>
                 <td className="table-record">{client.email}</td>
-                <td className="table-record">{client.amountOfOrders}</td>
+                <td className="table-record flex items-center gap-x-1">
+                  <BiPackage />
+                  {client.amountOfOrders}
+                </td>
                 <td className="table-record">
                   {formatDate(client.xata.createdAt)}
                 </td>
@@ -80,7 +85,7 @@ export default function Table({
   }
   if (type === "OrdersTable" && ordersData !== undefined) {
     return (
-      <Box className="overflow-y-auto max-h-[76vh]">
+      <Box className="overflow-y-auto max-h-[80vh] bg-transparent border border-fill-200/50 shadow-md">
         {ordersData.length <= 0 && (
           <div className="mt-40 flex flex-col gap-y-3 items-center text-base-300">
             <BiConfused size={100} />

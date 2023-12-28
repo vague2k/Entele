@@ -1,7 +1,7 @@
 import type { ReactEventHandler } from "react";
 import { BiAlarmExclamation, BiCheck, BiX } from "react-icons/bi";
-import Box from "../Box";
-import Button from "../Button";
+import Box from "../ui/Box";
+import Button from "../ui/Button";
 
 interface GeneralModalProps {
   header: string;
@@ -19,29 +19,33 @@ export function OnSuccessModal({
   onClose,
 }: GeneralModalProps) {
   return (
-    <Box className="h-fit w-fit max-w-lg p-8">
-      <div className="relative flex flex-col justify-center gap-y-3 items-center px-8">
-        <div className="flex justify-center items-center w-11 h-11 rounded-full bg-green-500">
-          <BiCheck size={25} className="text-base-50" />
+    <Box className="h-fit w-full rounded-xl max-w-lg p-7">
+      <div className="relative items-center">
+        <div className="block mr-auto">
+          <h1 className="flex gap-x-2 font-medium text-lg text-left text-base-900">
+            {header}
+            <BiCheck size={25} className="text-green-600" />
+          </h1>
+          <p className="font-normal text-left text-sm w-[430px] text-base-500">
+            {description}
+          </p>
         </div>
-        <h1 className="font-semibold text-lg text-base-950">{header}</h1>
-        <p className="font-regular text-sm text-center text-base-500">
-          {description}
-        </p>
         <Button
           onClick={onClose}
           type="button"
-          className="absolute -right-5 -top-5 bg-transparent hover:bg-fill-100 duration-300 text-base-950"
+          className="absolute -right-5 -top-5 bg-transparent hover:bg-fill-100"
         >
           <BiX size={20} />
         </Button>
-        <Button
-          onClick={onClose}
-          type="button"
-          className="bg-fill-100 hover:bg-fill-200 duration-300 text-base-950"
-        >
-          Dismiss
-        </Button>
+        <div className="flex justify-end">
+          <Button
+            onClick={onClose}
+            type="button"
+            className="bg-fill-100 hover:bg-fill-200 text-base-900 mt-6"
+          >
+            Dismiss
+          </Button>
+        </div>
       </div>
     </Box>
   );
@@ -54,38 +58,40 @@ export function ConfirmActionModal({
   callback,
 }: ConfirmActionModalProps) {
   return (
-    <Box className="relative h-fit w-fit max-w-lg p-8">
-      <div className="flex flex-col justify-center gap-y-3 items-center">
+    <Box className="h-fit w-full rounded-xl max-w-lg p-7">
+      <div className="relative items-center">
+        <div className="block mr-auto">
+          <h1 className="flex gap-x-2 font-medium text-lg text-left text-base-900">
+            {header}
+            <BiAlarmExclamation size={25} className="text-yellow-500" />
+          </h1>
+          <p className="font-normal text-left text-sm w-[420px] text-base-500">
+            {description}
+          </p>
+        </div>
         <Button
           onClick={onClose}
           type="button"
-          className="absolute right-3 top-3 bg-transparent hover:bg-fill-100 duration-300 text-base-950"
+          className="absolute -right-5 -top-5 bg-transparent hover:bg-fill-100"
         >
           <BiX size={20} />
         </Button>
-        <div className="flex justify-center items-center w-11 h-11 rounded-full bg-yellow-300">
-          <BiAlarmExclamation size={25} className="text-yellow-600" />
+        <div className="flex justify-end gap-x-1">
+          <Button
+            onClick={onClose}
+            type="button"
+            className="bg-fill-100 hover:bg-fill-200 text-base-900 mt-6"
+          >
+            No, cancel
+          </Button>
+          <Button
+            onClick={callback}
+            type="button"
+            className="bg-yellow-500 hover:bg-yellow-600 text-base-900 mt-6"
+          >
+            Yes, I'm sure
+          </Button>
         </div>
-        <h1 className="font-semibold text-lg text-base-950">{header}</h1>
-        <p className="font-regular text-sm text-center text-base-500">
-          {description}
-        </p>
-      </div>
-      <div className="flex justify-center items-center gap-x-3 pt-3">
-        <Button
-          onClick={onClose}
-          type="button"
-          className="bg-fill-100 hover:bg-fill-200 duration-300 text-base-950"
-        >
-          Cancel action
-        </Button>
-        <Button
-          onClick={callback}
-          type="button"
-          className="bg-yellow-400 hover:bg-yellow-500 duration-300 text-base-950"
-        >
-          Yes, Continue
-        </Button>
       </div>
     </Box>
   );

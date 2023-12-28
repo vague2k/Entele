@@ -1,9 +1,9 @@
 import { useState, type ChangeEvent } from "react";
 import { BiX } from "react-icons/bi";
 import type { ModalProps } from "../../types";
-import Box from "../Box";
-import Button from "../Button";
-import Input from "../Input";
+import Box from "../ui/Box";
+import Button from "../ui/Button";
+import Input from "../ui/Input";
 
 export default function CreateOrderModal({ isOpen, onClose }: ModalProps) {
   const [form, setForm] = useState({
@@ -17,6 +17,7 @@ export default function CreateOrderModal({ isOpen, onClose }: ModalProps) {
     garmentColor: "",
   });
 
+  // FIX: Whenever a letter is typed, input field says NaN and will not let u type again until page refresh
   function onChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     const isNumericValue =

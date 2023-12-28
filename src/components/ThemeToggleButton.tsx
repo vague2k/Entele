@@ -1,14 +1,8 @@
 import { useEffect, useState } from "react";
 import { BiMoon, BiSun } from "react-icons/bi";
-import { twMerge } from "tailwind-merge";
+import Button from "./ui/Button";
 
-interface ThemeToggleButtonProps {
-  collapsedSidebar: boolean;
-}
-
-export function ThemeToggleButton({
-  collapsedSidebar,
-}: ThemeToggleButtonProps) {
+export function ThemeToggleButton() {
   const [isDark, setIsDark] = useState<boolean>(
     localStorage.getItem("theme") === "true",
   );
@@ -25,21 +19,17 @@ export function ThemeToggleButton({
   };
 
   return (
-    <button
+    <Button
       type="button"
       onClick={() => {
         toggleTheme();
       }}
-      className={twMerge(
-        "p-2 mr-1 rounded-lg bg-fill-100 hover:bg-fill-200 transition-all duration-300",
-        collapsedSidebar ? "block" : "hidden",
-      )}
     >
       {isDark ? (
-        <BiMoon size={21} className="text-base-950" />
+        <BiMoon size={19} className="text-base-900" />
       ) : (
-        <BiSun size={21} className="text-base-950" />
+        <BiSun size={19} className="text-base-900" />
       )}
-    </button>
+    </Button>
   );
 }
