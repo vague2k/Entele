@@ -9,22 +9,9 @@ const Button = forwardRef<
     <button
       type={type}
       className={twMerge(
-        `
-            flex 
-            cursor-pointer 
-            items-center 
-            font-medium 
-            bg-fill-100 
-            hover:bg-fill-200
-            duration-300
-            rounded-lg 
-            p-2 
-            gap-x-2
-            text-base-950 
-            hover:shadow-xl 
-            hover:-translate-y-0.5
-
-            `,
+        `inline-flex h-9 px-3 py-2 cursor-pointer items-center justify-center text-sm font-normal 
+        bg-fill-100 hover:bg-fill-200 duration-300 rounded-lg gap-x-1 text-base-900
+        transform transition-all active:scale-95 active:duration-75`,
         className,
       )}
       ref={ref}
