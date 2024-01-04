@@ -1,4 +1,4 @@
-import { type SetStateAction, useState } from "react";
+import { useState, type SetStateAction } from "react";
 import { createPortal } from "react-dom";
 import { BiCheck, BiChevronDown } from "react-icons/bi";
 import { twMerge } from "tailwind-merge";

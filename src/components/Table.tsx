@@ -1,15 +1,14 @@
-import { useState, type SetStateAction } from "react";
-import { createPortal } from "react-dom";
-import { BiCheck, BiChevronDown, BiConfused } from "react-icons/bi";
+import { useState } from "react";
+import { BiConfused } from "react-icons/bi";
 import { twMerge } from "tailwind-merge";
 import { TableType } from "../types";
 import { formatDate } from "../utils";
 import type { ClientsRecord, OrdersRecord } from "../xata";
+import { TableColumnDropdownButton } from "./TableColumnDropdown";
 import TableWrapper, { tableHeaders } from "./TableWrapper";
 import Box from "./ui/Box";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
-import { TableColumnDropdown } from "./TableColumnDropdown";
 
 interface TableProps {
   clientData?: ClientsRecord[];
@@ -93,7 +92,7 @@ export default function Table({
           <Input placeholder="Search" className="w-1/2 my-2" />
           <div className="flex ml-auto gap-x-2">
             <Button>Table View</Button>
-            <TableColumnDropdown
+            <TableColumnDropdownButton
               columnVisibility={columnVisibility}
               setColumnVisibility={setColumnVisibility}
               type={type}
