@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type SetStateAction } from "react";
 import { createPortal } from "react-dom";
 import { BiCheck, BiChevronDown, BiConfused } from "react-icons/bi";
 import { twMerge } from "tailwind-merge";
@@ -9,13 +9,16 @@ import TableWrapper, { tableHeaders } from "./TableWrapper";
 import Box from "./ui/Box";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
+import { TableColumnDropdown } from "./TableColumnDropdown";
 
 interface TableProps {
   clientData?: ClientsRecord[];
   ordersData?: OrdersRecord[];
-  callback: (...args) => void;
+  callback: (...args: any[]) => void;
   type: TableType;
 }
+
+type VisibleTableColumn = Record<string, boolean>;
 
 export default function Table({
   clientData,
@@ -24,17 +27,16 @@ export default function Table({
   callback,
 }: TableProps) {
   /* TODO: tableHeaders should be dynamic and not hard coded
-  /* FIX:  fuck ton of type issues
    * NOTE: used hard coded tableHeaders.ClientsTable just to see if the implementation it works
    */
 
+  /* This state is an object, where the keys are the column names,
+   * and values are booleans representing it's visiblity status.
+   *
+   * by default all columns are visible (set to true)
+   */
   const [columnVisibility, setColumnVisibility] = useState(() => {
-    /* This state is an object, where the keys are the column names,
-     * and values are booleans representing it's visiblity status.
-     *
-     * by default all columns are visible (set to true)
-     */
-    const initialVisibility = {};
+    const initialVisibility: VisibleTableColumn = {};
     for (const header of tableHeaders.ClientsTable) {
       initialVisibility[header.name] = true;
     }
@@ -53,8 +55,9 @@ export default function Table({
    *
    * I.E a nested prop in this case could be "xata.createdAt"
    */
+
   function getValueFromClientData(
-    clientRecord: { [key: string]: any } | null,
+    clientRecord: any, // really did not wanna bother with type checking this lmao
     dbFieldName: string,
   ) {
     // split any fields that have nested properties
@@ -62,12 +65,10 @@ export default function Table({
     let value = clientRecord;
 
     for (const fieldName of fieldNames) {
-      console.log(fieldNames[0]);
-
       /* if the client's record has dbFieldName as a property
        * we set value with whatever the NEW value of value[<prop>] is
        */
-      if (value?.hasOwnProperty(fieldName)) {
+      if (value && Object.prototype.hasOwnProperty.call(value, fieldName)) {
         value = value[fieldName];
 
         // if the column's dbFieldName is NOT a prop of our value, set the value to null
@@ -78,8 +79,8 @@ export default function Table({
     }
 
     // Then, check if this value (dbFieldName) ("I.E. xata.createdAt") corresponds to a date
-    if (value && typeof value === "string" && isDateField(dbFieldName)) {
-      value = formatDate(value);
+    if (value && isDateField(dbFieldName)) {
+      value = formatDate(value as Date);
     }
 
     return value;
@@ -95,6 +96,7 @@ export default function Table({
             <TableColumnDropdown
               columnVisibility={columnVisibility}
               setColumnVisibility={setColumnVisibility}
+              type={type}
             />
           </div>
         </div>
@@ -237,61 +239,4 @@ export default function Table({
   }
 */
   }
-}
-
-function TableColumnDropdown({ columnVisibility, setColumnVisibility }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const injectMenuIntoOverlayDiv = document.getElementById("overlay");
-
-  if (injectMenuIntoOverlayDiv === null) {
-    throw new Error('Could not find document by Id "overlay"');
-  }
-
-  return (
-    <>
-      <Button onClick={() => setIsExpanded(!isExpanded)}>
-        Columns
-        <BiChevronDown />
-      </Button>
-      {isExpanded &&
-        createPortal(
-          <TableColumnDropdownMenu
-            columnVisibility={columnVisibility}
-            setColumnVisibility={setColumnVisibility}
-          />,
-          injectMenuIntoOverlayDiv,
-        )}
-    </>
-  );
-}
-
-function TableColumnDropdownMenu({ columnVisibility, setColumnVisibility }) {
-  const toggleColumnVisibility = (columnName) => {
-    setColumnVisibility((prevVisibility) => ({
-      ...prevVisibility,
-      [columnName]: !prevVisibility[columnName],
-    }));
-  };
-
-  return (
-    <Box className="absolute shadow-md top-28 z-10 right-4 h-fit w-[150px] p-1 border border-fill-200/50">
-      {tableHeaders.ClientsTable.map((item) => (
-        <Button
-          key={item.id}
-          className="flex w-full rounded-md py-0 bg-transparent justify-start hover:bg-fill-100"
-          onClick={() => toggleColumnVisibility(item.name)}
-        >
-          <BiCheck
-            className={`mr-1 text-base-900 ${
-              columnVisibility[item.name]
-                ? "text-opacity-100"
-                : "text-opacity-0"
-            }`}
-          />
-          {item.name}
-        </Button>
-      ))}
-    </Box>
-  );
 }
