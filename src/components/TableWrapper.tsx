@@ -8,7 +8,7 @@ export const tableHeaders = {
       id: 1,
       name: "clientID",
       dbFieldName: "id",
-      classname: "w-[110px] block truncate",
+      classname: "w-[110px] block truncate-left",
     },
     { id: 2, name: "Name", dbFieldName: "name", classname: "" },
     { id: 3, name: "Email", dbFieldName: "email", classname: "" },
@@ -23,13 +23,24 @@ export const tableHeaders = {
   ],
 
   [TableType.OrdersTable]: [
-    { id: 1, name: "Name", classname: "" },
-    { id: 2, name: "Total Units", classname: "" },
-    { id: 3, name: "Completed Order", classname: "" },
-    { id: 4, name: "Created At", classname: "" },
-    { id: 5, name: "Total", classname: "" },
-    { id: 6, name: "Average Price", classname: "" },
-    { id: 7, name: "Last Updated", classname: "" },
+    { id: 1, name: "OrderID", dbFieldName: "id", classname: "" },
+    { id: 2, name: "Name", dbFieldName: "clients.name", classname: "" },
+    { id: 3, name: "Total Units", dbFieldName: "totalUnits", classname: "" },
+    { id: 4, name: "Completed Order", dbFieldName: "complete", classname: "" },
+    { id: 5, name: "Created At", dbFieldName: "xata.createdAt", classname: "" },
+    { id: 6, name: "Total", dbFieldName: "totalAmount", classname: "" },
+    {
+      id: 7,
+      name: "Average Price",
+      dbFieldName: "averageUnitPrice",
+      classname: "",
+    },
+    {
+      id: 8,
+      name: "Last Updated",
+      dbFieldName: "xata.updatedAt",
+      classname: "",
+    },
   ],
 };
 

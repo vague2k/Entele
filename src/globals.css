@@ -98,3 +98,10 @@
     font-normal 
     p-1.5;
 }
+
+.truncate-left {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  direction: rtl;
+  white-space: nowrap;
+}
