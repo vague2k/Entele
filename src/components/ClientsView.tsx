@@ -30,11 +30,15 @@ export default function ClientsView() {
     amountOfOrders: 0,
   });
 
+  /* NOTE: The params for onClientRecordClick are in alphabetical order
+   *       since this is the same order that the dataItem object from the data prop in Table
+   *       is spread.
+   * */
   function onClientRecordClick(
+    amountOfOrders: number,
+    email: string,
     id: string,
     name: string,
-    email: string,
-    amountOfOrders: number,
   ) {
     dispatchModal({ type: "openEditRecord" });
     setClientInfo({ id, name, email, amountOfOrders });
@@ -54,10 +58,6 @@ export default function ClientsView() {
         );
       }
     } finally {
-      // setTimeout(() => {
-      //   console.log("Delayed for 1 second.");
-      //   setLoading(false);
-      // }, 3000);
       setLoading(false);
     }
   }

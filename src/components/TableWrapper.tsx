@@ -23,10 +23,15 @@ export const tableHeaders = {
   ],
 
   [TableType.OrdersTable]: [
-    { id: 1, name: "OrderID", dbFieldName: "id", classname: "" },
-    { id: 2, name: "Name", dbFieldName: "clients.name", classname: "" },
+    {
+      id: 1,
+      name: "OrderID",
+      dbFieldName: "id",
+      classname: "w-[110px] block truncate-left",
+    },
+    { id: 2, name: "Name", dbFieldName: "clients.id", classname: "" },
     { id: 3, name: "Total Units", dbFieldName: "totalUnits", classname: "" },
-    { id: 4, name: "Completed Order", dbFieldName: "complete", classname: "" },
+    { id: 4, name: "Completed", dbFieldName: "complete", classname: "" },
     { id: 5, name: "Created At", dbFieldName: "xata.createdAt", classname: "" },
     { id: 6, name: "Total", dbFieldName: "totalAmount", classname: "" },
     {

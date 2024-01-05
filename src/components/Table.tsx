@@ -11,19 +11,11 @@ import Input from "./ui/Input";
 
 interface TableProps {
   data: any[];
-  // clientData?: ClientsRecord[];
-  // ordersData?: OrdersRecord[];
-  callback: (...args: any[]) => void;
+  callback?: (...args: any[]) => void;
   type: TableType;
 }
 
-export default function Table({
-  // clientData,
-  // ordersData,
-  type,
-  data,
-  callback,
-}: TableProps) {
+export default function Table({ type, data, callback }: TableProps) {
   /* This state is an object, where the keys are the column names,
    * and values are booleans representing it's visiblity status.
    *
@@ -51,12 +43,12 @@ export default function Table({
    */
 
   function getValueFromClientData(
-    record: any, // really did not wanna bother with type checking this lmao
+    record: [], // really did not wanna bother with type checking this lmao
     dbFieldName: string,
   ) {
     // split any fields that have nested properties
     const fieldNames: string[] = dbFieldName.split(".");
-    let value = record;
+    let value: any = record;
 
     for (const fieldName of fieldNames) {
       /* if the client's record has dbFieldName as a property
@@ -99,27 +91,16 @@ export default function Table({
            * gets passed down as a prop.
            */
           <TableWrapper type={type} columnVisibility={columnVisibility}>
-            {data.map((data) => (
+            {data.map((dataItem) => (
               <tr
-                key={data.id}
-                onClick={() =>
-                  // TODO: is there a way to pass both Client and Order record fields as params?
-                  callback(data.id, data.name, data.email, data.amountOfOrders)
-                }
+                onClick={() => {
+                  callback(...Object.values(dataItem));
+                  // console.log(...Object.values(dataItem));
+                }}
                 onKeyDown={(event) => {
                   // Check if the Enter key is pressed
                   if (event.key === "Enter") {
-                    callback(
-                      data.id,
-                      data.name,
-                      data.email,
-                      data.amountOfOrders,
-                      data.totalUnits,
-                      data.totalAmount,
-                      data.complete,
-                      data.clients.name,
-                      data.averageUnitprice,
-                    );
+                    callback(...Object.values(dataItem));
                   }
                 }}
                 className="border-b border-fill-200 py-2 hover:bg-fill-100 duration-300 cursor-pointer"
@@ -129,6 +110,11 @@ export default function Table({
                 {/* Where the header of a specific column is true, meaning the header is rendered 
                         Render the cells of that column, and render it's values
                   */}
+                {/* TODO: How can we get client info like name and email from the clients id
+                          to render the clients name of who the order is attatched to.
+                */}
+                {/* TODO: How can we render an icon for specific fields if we choose to do so? */}
+                {/* TODO: Make callback REQUIRED once onOrderRecordClick function is coded */}
                 {tableHeaders[type]
                   .filter((header) => columnVisibility[header.name])
                   .map((column) => (
@@ -136,7 +122,7 @@ export default function Table({
                       key={column.id}
                       className={twMerge("table-record", column.classname)}
                     >
-                      {getValueFromClientData(data, column.dbFieldName)}
+                      {getValueFromClientData(dataItem, column.dbFieldName)}
                     </td>
                   ))}
               </tr>
