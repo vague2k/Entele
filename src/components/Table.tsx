@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { BiConfused } from "react-icons/bi";
+import {
+  BiCheckCircle,
+  BiConfused,
+  BiPackage,
+  BiXCircle,
+} from "react-icons/bi";
 import { twMerge } from "tailwind-merge";
 import { TableType, type VisibleTableColumn } from "../types";
 import { formatDate } from "../utils";
@@ -30,19 +35,11 @@ export default function Table({ type, data, callback }: TableProps) {
     return initialVisibility;
   });
 
-  /* This function will be used in getValueFromClient
-   * to apply the formateDate util function on
-   */
-  function isDateField(dbFieldName: string): boolean {
-    return dbFieldName === "xata.createdAt" || dbFieldName === "xata.updatedAt";
-  }
-
   /* This function checks if each columns dbFieldName has a nested property or not
    *
    * I.E a nested prop in this case could be "xata.createdAt"
    */
-
-  function getValueFromClientData(
+  function getValueFromDataProperty(
     record: [], // really did not wanna bother with type checking this lmao
     dbFieldName: string,
   ) {
@@ -64,9 +61,41 @@ export default function Table({ type, data, callback }: TableProps) {
       }
     }
 
-    // Then, check if this value (dbFieldName) ("I.E. xata.createdAt") corresponds to a date
-    if (value && isDateField(dbFieldName)) {
+    // We check for specific field names and we can render whatever want
+    // like for example, we can render icons and such
+    if (dbFieldName === "xata.createdAt" || dbFieldName === "xata.updatedAt") {
       value = formatDate(value as Date);
+    }
+
+    if (dbFieldName === "complete" && value === true) {
+      value = (
+        <span className="flex gap-x-1">
+          <BiCheckCircle className="text-green-500" size={20} />
+          Shipped
+        </span>
+      );
+    }
+
+    if (dbFieldName === "complete" && value === false) {
+      value = (
+        <span className="flex gap-x-1">
+          <BiXCircle className="text-red-600" size={20} />
+          Not Shipped
+        </span>
+      );
+    }
+
+    if (dbFieldName === "averageUnitPrice" || dbFieldName === "totalAmount") {
+      value = <>$ {value}</>;
+    }
+
+    if (dbFieldName === "amountOfOrders") {
+      value = (
+        <span className="flex items-center gap-x-1">
+          <BiPackage />
+          {value}
+        </span>
+      );
     }
 
     return value;
@@ -113,7 +142,6 @@ export default function Table({ type, data, callback }: TableProps) {
                 {/* TODO: How can we get client info like name and email from the clients id
                           to render the clients name of who the order is attatched to.
                 */}
-                {/* TODO: How can we render an icon for specific fields if we choose to do so? */}
                 {/* TODO: Make callback REQUIRED once onOrderRecordClick function is coded */}
                 {tableHeaders[type]
                   .filter((header) => columnVisibility[header.name])
@@ -122,7 +150,7 @@ export default function Table({ type, data, callback }: TableProps) {
                       key={column.id}
                       className={twMerge("table-record", column.classname)}
                     >
-                      {getValueFromClientData(dataItem, column.dbFieldName)}
+                      {getValueFromDataProperty(dataItem, column.dbFieldName)}
                     </td>
                   ))}
               </tr>
