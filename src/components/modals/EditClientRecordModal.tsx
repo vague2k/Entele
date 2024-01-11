@@ -27,11 +27,12 @@ export default function EditRecordModal({
   const [successHeader, setSuccessHeader] = useState("");
   const [successDescription, setSuccessDescription] = useState("");
 
-  // FIX: Whenever a letter is typed, input field says NaN and will not let u type again until page refresh
   function onChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     const isNumericValue =
-      value !== "" && name === "amountOfOrders" ? parseInt(value, 10) : value;
+      value !== "" && name === "amountOfOrders" && Number.isNaN(value)
+        ? parseInt(value, 10)
+        : value;
     setEditedClient({ ...editedClient, [name]: isNumericValue });
   }
 

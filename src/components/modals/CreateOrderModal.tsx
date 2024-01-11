@@ -17,11 +17,12 @@ export default function CreateOrderModal({ isOpen, onClose }: ModalProps) {
     garmentColor: "",
   });
 
-  // FIX: Whenever a letter is typed, input field says NaN and will not let u type again until page refresh
   function onChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     const isNumericValue =
-      value !== "" && (name === "units" || name === "unitPrice")
+      value !== "" &&
+      (name === "units" || name === "unitPrice") &&
+      Number.isNaN(value)
         ? parseInt(value, 10)
         : value;
     setForm({ ...form, [name]: isNumericValue });
