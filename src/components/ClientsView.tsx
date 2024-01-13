@@ -2,20 +2,22 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import axios from "axios";
 import { useEffect, useReducer, useState } from "react";
 import toast from "react-hot-toast";
+import { BiLoaderAlt } from "react-icons/bi";
 import "../globals.css";
 import { ActionBarType, TableType } from "../types";
 import type { ClientsRecord } from "../xata";
 import ActionBar from "./ActionBar";
-import Input from "./Input";
 import Table from "./Table";
 import CreateClientModal from "./modals/CreateClientModal";
 import DeleteAllClientsModal from "./modals/DeleteAllClientsModal";
 import EditRecordModal from "./modals/EditClientRecordModal";
 import modalReducer from "./modals/modalReducer";
+import Box from "./ui/Box";
 
 export default function ClientsView() {
   const [animationParent] = useAutoAnimate();
   const [listOfClients, setListOfClients] = useState<ClientsRecord[]>([]);
+  const [loading, setLoading] = useState(true);
   const [modalState, dispatchModal] = useReducer(modalReducer, {
     isCreateClientOpen: false,
     isDeleteAllOpen: false,
@@ -28,11 +30,15 @@ export default function ClientsView() {
     amountOfOrders: 0,
   });
 
+  /* NOTE: The params for onClientRecordClick are in alphabetical order
+   *       since this is the same order that the dataItem object from the data prop in Table
+   *       is spread.
+   * */
   function onClientRecordClick(
+    amountOfOrders: number,
+    email: string,
     id: string,
     name: string,
-    email: string,
-    amountOfOrders: number,
   ) {
     dispatchModal({ type: "openEditRecord" });
     setClientInfo({ id, name, email, amountOfOrders });
@@ -51,6 +57,8 @@ export default function ClientsView() {
           "An unknown error has occured, and has been automatically logged. Please try this action again later",
         );
       }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -58,14 +66,7 @@ export default function ClientsView() {
     fetchData();
   }, []);
   return (
-    <div className="p-[17px]" ref={animationParent}>
-      <div className="flex pb-4 gap-x-3 justify-center items-center">
-        <h1 className="text-base-950 font-semibold text-2xl whitespace-nowrap">
-          All your clients in one place!
-        </h1>
-        <Input placeholder="Search" />
-      </div>
-
+    <div className="p-[17px]">
       <ActionBar
         type={ActionBarType.ClientsActionBar}
         createCallback={() => {
@@ -75,45 +76,55 @@ export default function ClientsView() {
           dispatchModal({ type: "openDeleteAll" });
         }}
       />
+      <div ref={animationParent}>
+        {loading ? (
+          <Box className="h-[82vh] mt-12 bg-transparent border border-fill-200/50 shadow-md">
+            <div className="mt-56 flex font-semibold text-2xl flex-col gap-y-3 items-center text-base-300">
+              <BiLoaderAlt className="animate-spin" size={100} />
+              Loading...
+            </div>
+          </Box>
+        ) : (
+          <Table
+            type={TableType.ClientsTable}
+            data={listOfClients}
+            callback={onClientRecordClick}
+          />
+        )}
 
-      <Table
-        type={TableType.ClientsTable}
-        clientData={listOfClients}
-        callback={onClientRecordClick}
-      />
-
-      {/* We call the dispatch function for the Modal's onClose prop 
+        {/* We call the dispatch function for the Modal's onClose prop 
       again here becuase dispatching toggles the boolean state */}
-      <DeleteAllClientsModal
-        onClose={() => dispatchModal({ type: "openDeleteAll" })}
-        isOpen={modalState.isDeleteAllOpen}
-        totalRecords={listOfClients.length}
-        refreshIfDataChange={async () => {
-          await fetchData();
-        }}
-      />
+        <DeleteAllClientsModal
+          onClose={() => dispatchModal({ type: "openDeleteAll" })}
+          isOpen={modalState.isDeleteAllOpen as true}
+          totalRecords={listOfClients.length}
+          refreshIfDataChange={async () => {
+            await fetchData();
+          }}
+        />
 
-      <EditRecordModal
-        onClose={() => dispatchModal({ type: "openEditRecord" })}
-        isOpen={modalState.isEditRecordOpen}
-        currentClient={{
-          id: clientInfo.id,
-          name: clientInfo.name,
-          email: clientInfo.email,
-          amountOfOrders: clientInfo.amountOfOrders,
-        }}
-        refreshIfDataChange={async () => {
-          await fetchData();
-        }}
-      />
+        <EditRecordModal
+          onClose={() => dispatchModal({ type: "openEditRecord" })}
+          isOpen={modalState.isEditRecordOpen as true}
+          currentClient={{
+            id: clientInfo.id,
+            name: clientInfo.name,
+            email: clientInfo.email,
+            amountOfOrders: clientInfo.amountOfOrders,
+          }}
+          refreshIfDataChange={async () => {
+            await fetchData();
+          }}
+        />
 
-      <CreateClientModal
-        onClose={() => dispatchModal({ type: "openCreateClient" })}
-        isOpen={modalState.isCreateClientOpen}
-        refreshIfDataChange={async () => {
-          await fetchData();
-        }}
-      />
+        <CreateClientModal
+          onClose={() => dispatchModal({ type: "openCreateClient" })}
+          isOpen={modalState.isCreateClientOpen as true}
+          refreshIfDataChange={async () => {
+            await fetchData();
+          }}
+        />
+      </div>
     </div>
   );
 }

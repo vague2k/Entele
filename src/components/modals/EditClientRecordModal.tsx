@@ -1,11 +1,11 @@
 import axios from "axios";
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import toast from "react-hot-toast";
-import { BiEdit, BiX } from "react-icons/bi";
+import { BiX } from "react-icons/bi";
 import type { EditClientRecordModalProps } from "../../types";
-import Box from "../Box";
-import Button from "../Button";
-import Input from "../Input";
+import Box from "../ui/Box";
+import Button from "../ui/Button";
+import Input from "../ui/Input";
 import { ConfirmActionModal, OnSuccessModal } from "./GeneralModals";
 
 export default function EditRecordModal({
@@ -30,7 +30,9 @@ export default function EditRecordModal({
   function onChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     const isNumericValue =
-      value !== "" && name === "amountOfOrders" ? parseInt(value, 10) : value;
+      value !== "" && name === "amountOfOrders" && Number.isNaN(value)
+        ? parseInt(value, 10)
+        : value;
     setEditedClient({ ...editedClient, [name]: isNumericValue });
   }
 
@@ -93,69 +95,92 @@ export default function EditRecordModal({
   return (
     <div className="flex items-center justify-center fixed inset-0 bg-fill-400 bg-opacity-30 backdrop-blur-sm">
       {!onSuccess && !isConfirmAction && (
-        <Box className="relative h-fit w-fit max-w-lg p-8">
-          <div className="flex flex-col justify-center gap-y-3 items-center">
+        <Box className="relative h-fit w-full max-w-[430px] p-8">
+          <div className="relative items-center">
             <Button
               onClick={onClose}
               type="button"
-              className="absolute right-3 top-3 bg-transparent hover:bg-fill-100 duration-300 text-base-950"
+              className="absolute -right-5 -top-5 bg-transparent hover:bg-fill-100"
             >
               <BiX size={20} />
             </Button>
-            <div className="flex justify-center items-center w-11 h-11 rounded-full bg-primary-200">
-              <BiEdit size={25} className="text-primary-500" />
+            <div className="mr-auto">
+              <h1 className="font-medium text-lg text-base-900">Edit Record</h1>
+              <p className="flex w-80 font-normal text-sm text-left text-base-500">
+                The client's current information are placeholders in the input
+                fields below.
+              </p>
             </div>
-            <h1 className="font-semibold text-lg text-base-950">Edit Record</h1>
-            <p className="flex flex-col pb-3 font-regular text-sm text-center text-base-500">
-              The client's current information are placeholders in the input
-              fields below.
-            </p>
 
-            <Input
-              onChange={onChange}
-              name="name"
-              value={editedClient.name}
-              placeholder={`Current name: ${currentClient.name}`}
-            />
-            <Input
-              onChange={onChange}
-              name="email"
-              value={editedClient.email}
-              placeholder={`Current email: ${currentClient.email}`}
-            />
-            <Input
-              onChange={onChange}
-              name="amountOfOrders"
-              value={editedClient.amountOfOrders}
-              placeholder={`Current order amount: ${currentClient.amountOfOrders}`}
-            />
+            <div className="pt-6">
+              <label
+                htmlFor="name"
+                className="text-sm mb-1 ml-1 mr-auto text-base-900"
+              >
+                Name
+              </label>
+              <Input
+                id="name"
+                onChange={onChange}
+                name="name"
+                value={editedClient.name}
+                placeholder={`Current name: ${currentClient.name}`}
+                className="mb-2"
+              />
+              <label
+                htmlFor="email"
+                className="text-sm mb-1 ml-1 mr-auto text-base-900"
+              >
+                Email
+              </label>
+              <Input
+                id="email"
+                onChange={onChange}
+                name="email"
+                value={editedClient.email}
+                placeholder={`Current email: ${currentClient.email}`}
+                className="mb-2"
+              />
+              <label
+                htmlFor="amountOfOrders"
+                className="text-sm mb-1 ml-1 mr-auto text-base-900"
+              >
+                Number of orders
+              </label>
+              <Input
+                id="amountOfOrders"
+                onChange={onChange}
+                name="amountOfOrders"
+                value={editedClient.amountOfOrders}
+                placeholder={`Current order amount: ${currentClient.amountOfOrders}`}
+                className="mb-2"
+              />
+            </div>
           </div>
 
-          <div className="flex justify-center items-center gap-x-3 pt-3">
-            <Button
-              onClick={onClose}
-              type="button"
-              className="bg-fill-100 hover:bg-fill-200 duration-300 text-base-950"
-            >
-              Cancel edits
-            </Button>
-
-            <Button
-              onClick={(event) => {
-                updateRecord(event);
-              }}
-              type="submit"
-              className="bg-primary-400 hover:bg-primary-300 duration-300 text-neutral-50"
-            >
-              Update record
-            </Button>
+          <div className="flex flex-row pt-7 mr-auto gap-x-1">
             <Button
               onClick={() => setIsConfirmAction(true)}
               type="submit"
-              className="bg-red-600 hover:bg-red-500 duration-300 text-neutral-50"
+              className="bg-red-600 hover:bg-red-500 text-neutral-50"
             >
-              Delete record?
+              Delete?
             </Button>
+            <div className="flex ml-auto gap-x-1">
+              <Button onClick={onClose} type="button">
+                Cancel
+              </Button>
+
+              <Button
+                onClick={(event) => {
+                  updateRecord(event);
+                }}
+                type="submit"
+                className="bg-primary-400 hover:bg-primary-300 text-neutral-50"
+              >
+                Save Changes
+              </Button>
+            </div>
           </div>
         </Box>
       )}
@@ -166,8 +191,8 @@ export default function EditRecordModal({
           callback={(event) => {
             deleteRecord(event);
           }}
-          header={`Delete ${editedClient.name}?`}
-          description={`You're about about to delete ${editedClient.name}. Would you like to continue?`}
+          header="Delete this client?"
+          description="You're about about to delete a client! Are you sure you would you like to continue?"
         />
       )}
 

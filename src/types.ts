@@ -23,3 +23,5 @@ export enum ActionBarType {
     ClientsActionBar = "ClientsActionBar",
     OrdersActionBar = "OrdersActionBar",
 }
+
+export type VisibleTableColumn = Record<string, boolean>;

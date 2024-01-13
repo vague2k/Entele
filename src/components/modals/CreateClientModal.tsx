@@ -1,11 +1,11 @@
 import axios from "axios";
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import toast from "react-hot-toast";
-import { BiUserPlus, BiX } from "react-icons/bi";
+import { BiX } from "react-icons/bi";
 import type { ModalProps } from "../../types";
-import Box from "../Box";
-import Button from "../Button";
-import Input from "../Input";
+import Box from "../ui/Box";
+import Button from "../ui/Button";
+import Input from "../ui/Input";
 import { OnSuccessModal } from "./GeneralModals";
 
 export default function CreateClientModal({
@@ -50,9 +50,9 @@ export default function CreateClientModal({
   return (
     <div className="flex items-center justify-center fixed inset-0 bg-fill-400 bg-opacity-30 backdrop-blur-sm">
       {!onSuccess && (
-        <Box className="relative h-fit w-fit max-w-lg p-8">
+        <Box className="relative h-fit w-full rounded-xl max-w-[500px] p-7">
           <form onSubmit={(event) => handleSubmit(event)}>
-            <div className="relative flex flex-col justify-center gap-y-3 items-center">
+            <div className="relative items-center">
               <Button
                 onClick={onClose}
                 type="button"
@@ -60,44 +60,57 @@ export default function CreateClientModal({
               >
                 <BiX size={20} />
               </Button>
-              <div className="flex justify-center items-center w-11 h-11 rounded-full bg-primary-200">
-                <BiUserPlus size={25} className="text-primary-500" />
+
+              <div className="mr-auto">
+                <h1 className="font-medium text-lg text-base-900">
+                  Create Client
+                </h1>
+                <p className="font-regular text-sm text-left w-96 text-base-500">
+                  The new client will have 0 orders by default. Don't worry,
+                  this can be updated later!
+                </p>
               </div>
-              <h1 className="font-semibold text-lg text-base-950">
-                Create a new client
-              </h1>
 
-              <Input
-                onChange={onChange}
-                name="name"
-                value={clientFormData.name}
-                placeholder="Name"
-              />
-              <Input
-                onChange={onChange}
-                name="email"
-                value={clientFormData.email}
-                placeholder="Email"
-              />
+              <div className="pt-6">
+                <label
+                  htmlFor="name"
+                  className="text-sm ml-1 mb-1 mr-auto text-base-900"
+                >
+                  Name
+                </label>
+                <Input
+                  id="name"
+                  onChange={onChange}
+                  name="name"
+                  value={clientFormData.name}
+                  placeholder="Name"
+                  className="mb-2"
+                />
 
-              <p className="pb-3 font-regular text-sm text-center text-base-500">
-                The new client will have 0 orders by default. Don't worry, this
-                can be updated later!
-              </p>
+                <label
+                  htmlFor="email"
+                  className="text-sm ml-1 mr-auto text-base-900"
+                >
+                  Email
+                </label>
+                <Input
+                  id="email"
+                  onChange={onChange}
+                  name="email"
+                  value={clientFormData.email}
+                  placeholder="Email"
+                />
+              </div>
             </div>
 
-            <div className="flex justify-center items-center gap-x-3 pt-3">
-              <Button
-                onClick={onClose}
-                type="button"
-                className="bg-fill-100 hover:bg-fill-200 duration-300 text-base-950"
-              >
+            <div className="flex justify-end items-center gap-x-1 pt-8">
+              <Button onClick={onClose} type="button">
                 Cancel
               </Button>
 
               <Button
                 type="submit"
-                className="bg-primary-500 hover:bg-primary-400 duration-300 text-neutral-50"
+                className="bg-primary-500 hover:bg-primary-400 text-neutral-50"
               >
                 Create Client
               </Button>

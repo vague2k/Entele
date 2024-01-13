@@ -1,11 +1,5 @@
 import type { APIRoute } from "astro";
-import { XataClient } from "../../../../xata";
-
-interface UpdateClientFormBody {
-    name: string
-    email: string
-    amountOfOrders: number
-}
+import { XataClient, type Clients } from "../../../../xata";
 
 const xata = new XataClient({ apiKey: import.meta.env.XATA_API_KEY })
 
@@ -13,11 +7,16 @@ export const PUT: APIRoute = async ({ params, request }) => {
     const id = params.id
 
     if (!id) {
-        return new Response(JSON.stringify({ message: "A client id is required" }), { status: 400 })
+        return new Response(
+            JSON.stringify(
+                { message: "/clients/[id]/update is missing a url param. This should be a client's record id" }
+            ),
+            { status: 400 }
+        );
     }
 
     try {
-        const formBody: UpdateClientFormBody = await request.json();
+        const formBody: Clients = await request.json();
 
         if (!formBody.name && !formBody.email && !formBody.amountOfOrders) {
             return new Response(

@@ -87,17 +87,21 @@
 .table-header {
   @apply text-sm 
     font-medium 
-    text-base-900 
-    px-6 
-    py-2 
-    text-left;
+    text-base-400 
+    text-left
+    px-1;
 }
 
 .table-record {
   @apply text-sm 
     text-base-900 
     font-normal 
-    px-6 
-    py-2 
-    whitespace-nowrap;
+    p-1.5;
+}
+
+.truncate-left {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  direction: rtl;
+  white-space: nowrap;
 }
