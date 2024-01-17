@@ -1,7 +1,6 @@
-import axios from "axios";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { BiX } from "react-icons/bi";
+import { deleteAllClients } from "../../stores/clients";
 import type { DeleteAllClientsModalProps } from "../../types";
 import Box from "../ui/Box";
 import Button from "../ui/Button";
@@ -16,25 +15,10 @@ export default function ConfirmDeleteModal({
   if (!isOpen) return null;
 
   const [onSuccess, setOnSuccess] = useState(false);
-  async function handleDeleteAllRecords() {
-    try {
-      await axios.delete("/api/clients/deleteall", {
-        headers: { "Content-Type": "application/json" },
-      });
 
-      // TODO: handle if delete all button is clicked when there is no data to delete
-
-      setOnSuccess(true);
-      refreshIfDataChange();
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        toast.error(error.response?.data.message);
-      } else {
-        toast.error(
-          "An unknown error has occured, and has been automatically logged. Please try this action again later",
-        );
-      }
-    }
+  function handleDeleteAllRecords() {
+    deleteAllClients(refreshIfDataChange);
+    setOnSuccess(true);
   }
 
   return (
