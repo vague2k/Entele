@@ -1,7 +1,6 @@
-import axios from "axios";
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
-import toast from "react-hot-toast";
 import { BiX } from "react-icons/bi";
+import { createClient } from "../../stores/clients";
 import type { ModalProps } from "../../types";
 import Box from "../ui/Box";
 import Button from "../ui/Button";
@@ -19,6 +18,7 @@ export default function CreateClientModal({
     name: "",
     email: "",
   });
+
   const [onSuccess, setOnSuccess] = useState(false);
 
   function onChange(event: ChangeEvent<HTMLInputElement>) {
@@ -28,23 +28,8 @@ export default function CreateClientModal({
 
   async function handleSubmit(event: SyntheticEvent) {
     event.preventDefault();
-
-    try {
-      await axios.post("/api/clients/create", clientFormData, {
-        headers: { "Content-Type": "application/json" },
-      });
-
-      refreshIfDataChange();
-      setOnSuccess(true);
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        toast.error(error.response?.data.message);
-      } else {
-        toast.error(
-          "An unknown error has occured, and has been automatically logged. Please try this action again later",
-        );
-      }
-    }
+    await createClient(clientFormData, refreshIfDataChange);
+    setOnSuccess(true);
   }
 
   return (

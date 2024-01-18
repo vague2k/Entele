@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useStore } from "@nanostores/react";
+import { useMemo } from "react";
 import type { IconType } from "react-icons";
 import { BiArrowFromLeft, BiArrowFromRight } from "react-icons/bi";
 import { twMerge } from "tailwind-merge";
 import SidebarRoutes from "../data/SidebarRoutes";
 import "../globals.css";
-import { SidebarContext, useSidebarContext } from "../hooks/SidebarContext";
+import { $settingsStore, toggleSidebar } from "../stores/settings";
 import { ThemeToggleButton } from "./ThemeToggleButton";
 import Button from "./ui/Button";
 
@@ -20,26 +21,11 @@ interface SidebarItemProps {
 }
 
 export default function Sidebar({ children }: SidebarProps) {
-  const [collapsedSidebar, setCollapsedSidebar] = useState(true);
+  // const [collapsedSidebar, setCollapsedSidebar] = useState(true);
 
   const routes = useMemo(() => SidebarRoutes, []);
 
-  useEffect(() => {
-    const storeCollapsedSidebar =
-      window.localStorage.getItem("collapsedSidebar");
-    setCollapsedSidebar(
-      storeCollapsedSidebar !== null
-        ? JSON.parse(storeCollapsedSidebar)
-        : false,
-    );
-  }, []);
-
-  useEffect(() => {
-    window.localStorage.setItem(
-      "collapsedSidebar",
-      JSON.stringify(collapsedSidebar),
-    );
-  }, [collapsedSidebar]);
+  const $settings = useStore($settingsStore);
 
   return (
     <aside className="flex h-screen">
@@ -48,14 +34,16 @@ export default function Sidebar({ children }: SidebarProps) {
           <h1
             className={twMerge(
               "flex text-2xl text-primary-500 font-bold overflow-hidden transition-all",
-              collapsedSidebar ? "w-36" : "w-0 text-transparent",
+              $settings.sidebar === "expanded"
+                ? "w-36"
+                : "w-0 text-transparent",
             )}
           >
             Entele
             <div
               className={twMerge(
                 "flex transition-all mr-1 justify-end",
-                collapsedSidebar ? "w-36" : "w-0",
+                $settings.sidebar === "expanded" ? "w-36" : "w-0",
               )}
             >
               <ThemeToggleButton />
@@ -63,28 +51,31 @@ export default function Sidebar({ children }: SidebarProps) {
           </h1>
           <Button
             type="button"
-            onClick={() => setCollapsedSidebar(!collapsedSidebar)}
+            onClick={() => {
+              toggleSidebar();
+            }}
           >
-            {collapsedSidebar ? (
+            {$settings.sidebar === "expanded" ? (
               <BiArrowFromRight size={22} className="text-base-950" />
             ) : (
               <BiArrowFromLeft size={22} className="text-base-950" />
             )}
           </Button>
         </div>
-        <SidebarContext.Provider value={collapsedSidebar}>
-          <ul className="flex-1 px-4">
-            {routes.map((item) => (
-              <SidebarItem key={item.label} {...item} />
-            ))}
-          </ul>
-        </SidebarContext.Provider>
+
+        <ul className="flex-1 px-4">
+          {routes.map((item) => (
+            <SidebarItem key={item.label} {...item} />
+          ))}
+        </ul>
 
         <div className="border-t border-fill-100 flex p-3 justify-center items-center">
           <div
             className={twMerge(
               "flex justify-start text-left overflow-hidden transition-all",
-              collapsedSidebar ? "w-36 ml-2" : "w-0 ml-0 text-transparent",
+              $settings.sidebar === "expanded"
+                ? "w-36 ml-2"
+                : "w-0 ml-0 text-transparent",
             )}
           >
             <div className="leading-4 mr-4">
@@ -103,8 +94,7 @@ export default function Sidebar({ children }: SidebarProps) {
 }
 
 export function SidebarItem({ Icon, label, active, href }: SidebarItemProps) {
-  const expanded = useSidebarContext();
-
+  const $settings = useStore($settingsStore);
   return (
     <a href={href}>
       <Button
@@ -119,7 +109,9 @@ export function SidebarItem({ Icon, label, active, href }: SidebarItemProps) {
         <span
           className={twMerge(
             "overflow-hidden transition-all justify-center",
-            expanded ? "w-36 ml-2" : "w-0 -ml-1 text-transparent",
+            $settings.sidebar === "expanded"
+              ? "w-36 ml-2"
+              : "w-0 -ml-1 text-transparent",
           )}
         >
           {label}
